@@ -9,12 +9,16 @@
 /* Begin PBXBuildFile section */
 		4253FC9B2DEE941D006EC86E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4253FC9A2DEE941D006EC86E /* README.md */; };
 		426B44202DEE64510091BF48 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 426B441F2DEE64510091BF48 /* libkmod.a */; };
+		42F99BBD2DEEAEC900BBD8A7 /* nv-kernel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F99BBC2DEEAEC900BBD8A7 /* nv-kernel.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4253FC9A2DEE941D006EC86E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		426B44042DEE5C770091BF48 /* NVMac.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NVMac.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		426B441F2DEE64510091BF48 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = usr/lib/libkmod.a; sourceTree = SDKROOT; };
+		42F99BAE2DEE9E7500BBD8A7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		42F99BAF2DEE9FC300BBD8A7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		42F99BBC2DEEAEC900BBD8A7 /* nv-kernel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "nv-kernel.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42F99BBD2DEEAEC900BBD8A7 /* nv-kernel.a in Frameworks */,
 				426B44202DEE64510091BF48 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,6 +60,7 @@
 			children = (
 				4253FC9A2DEE941D006EC86E /* README.md */,
 				426B44062DEE5C770091BF48 /* NVMac */,
+				42F99BA12DEE9DF800BBD8A7 /* Support */,
 				426B441E2DEE64510091BF48 /* Frameworks */,
 				426B44052DEE5C770091BF48 /* Products */,
 			);
@@ -76,6 +82,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		42F97F3B2DEE9DF800BBD8A7 /* nvidia-agnostic-api */ = {
+			isa = PBXGroup;
+			children = (
+				42F99BAE2DEE9E7500BBD8A7 /* README.md */,
+				42F99BAF2DEE9FC300BBD8A7 /* Makefile */,
+				42F99BBC2DEEAEC900BBD8A7 /* nv-kernel.a */,
+			);
+			path = "nvidia-agnostic-api";
+			sourceTree = "<group>";
+		};
+		42F99BA12DEE9DF800BBD8A7 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				42F97F3B2DEE9DF800BBD8A7 /* nvidia-agnostic-api */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -87,6 +111,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
+
+/* Begin PBXLegacyTarget section */
+		42F979F22DEE984800BBD8A7 /* nvidia-agnostic-api */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "faux_nv_kernel_library -j -f $(PROJECT_DIR)/Support/nvidia-agnostic-api/Makefile";
+			buildConfigurationList = 42F979F32DEE984800BBD8A7 /* Build configuration list for PBXLegacyTarget "nvidia-agnostic-api" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "$(PROJECT_DIR)/Support/open-gpu-kernel-modules/src/nvidia";
+			dependencies = (
+			);
+			name = "nvidia-agnostic-api";
+			packageProductDependencies = (
+			);
+			passBuildSettingsInEnvironment = 1;
+			productName = "nvidia-agnostic-api";
+		};
+/* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
 		426B44032DEE5C770091BF48 /* NVMac */ = {
@@ -125,6 +168,9 @@
 						CreatedOnToolsVersion = 16.4;
 						LastSwiftMigration = 1640;
 					};
+					42F979F22DEE984800BBD8A7 = {
+						CreatedOnToolsVersion = 16.4;
+					};
 				};
 			};
 			buildConfigurationList = 426B43FE2DEE5C770091BF48 /* Build configuration list for PBXProject "NVMac" */;
@@ -141,6 +187,7 @@
 			projectRoot = "";
 			targets = (
 				426B44032DEE5C770091BF48 /* NVMac */,
+				42F979F22DEE984800BBD8A7 /* nvidia-agnostic-api */,
 			);
 		};
 /* End PBXProject section */
@@ -180,6 +227,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NVMac/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Support/open-gpu-kernel-modules/src/nvidia",
+					"$(PROJECT_DIR)/Support/nvidia-agnostic-api",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
 				MODULE_NAME = space.joscomputing.NVMac;
@@ -207,6 +259,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NVMac/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Support/open-gpu-kernel-modules/src/nvidia",
+					"$(PROJECT_DIR)/Support/nvidia-agnostic-api",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
 				MODULE_NAME = space.joscomputing.NVMac;
@@ -343,6 +400,29 @@
 			};
 			name = Release;
 		};
+		42F979F42DEE984800BBD8A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NP873NYDVX;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		42F979F52DEE984800BBD8A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = NP873NYDVX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -360,6 +440,15 @@
 			buildConfigurations = (
 				426B440E2DEE5C770091BF48 /* Debug */,
 				426B440F2DEE5C770091BF48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42F979F32DEE984800BBD8A7 /* Build configuration list for PBXLegacyTarget "nvidia-agnostic-api" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42F979F42DEE984800BBD8A7 /* Debug */,
+				42F979F52DEE984800BBD8A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
