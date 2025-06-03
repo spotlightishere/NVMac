@@ -1,0 +1,3 @@
+AllowShortFunctionsOnASingleLine: Empty
+BasedOnStyle: LLVM
+PointerAlignment: Left
