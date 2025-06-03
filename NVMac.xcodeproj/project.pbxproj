@@ -14,7 +14,7 @@
 
 /* Begin PBXFileReference section */
 		4253FC9A2DEE941D006EC86E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		426B44042DEE5C770091BF48 /* NVMac.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NVMac.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		426B44042DEE5C770091BF48 /* NVMacRM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NVMacRM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		426B441F2DEE64510091BF48 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = usr/lib/libkmod.a; sourceTree = SDKROOT; };
 		42F99BAE2DEE9E7500BBD8A7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		42F99BAF2DEE9FC300BBD8A7 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -22,22 +22,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		426B440C2DEE5C770091BF48 /* Exceptions for "NVMac" folder in "NVMac" target */ = {
+		426B440C2DEE5C770091BF48 /* Exceptions for "NVMacRM" folder in "NVMacRM" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 426B44032DEE5C770091BF48 /* NVMac */;
+			target = 426B44032DEE5C770091BF48 /* NVMacRM */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		426B44062DEE5C770091BF48 /* NVMac */ = {
+		426B44062DEE5C770091BF48 /* NVMacRM */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				426B440C2DEE5C770091BF48 /* Exceptions for "NVMac" folder in "NVMac" target */,
+				426B440C2DEE5C770091BF48 /* Exceptions for "NVMacRM" folder in "NVMacRM" target */,
 			);
-			path = NVMac;
+			path = NVMacRM;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -59,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				4253FC9A2DEE941D006EC86E /* README.md */,
-				426B44062DEE5C770091BF48 /* NVMac */,
+				426B44062DEE5C770091BF48 /* NVMacRM */,
 				42F99BA12DEE9DF800BBD8A7 /* Support */,
 				426B441E2DEE64510091BF48 /* Frameworks */,
 				426B44052DEE5C770091BF48 /* Products */,
@@ -69,7 +69,7 @@
 		426B44052DEE5C770091BF48 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				426B44042DEE5C770091BF48 /* NVMac.kext */,
+				426B44042DEE5C770091BF48 /* NVMacRM.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,9 +132,9 @@
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
-		426B44032DEE5C770091BF48 /* NVMac */ = {
+		426B44032DEE5C770091BF48 /* NVMacRM */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 426B440D2DEE5C770091BF48 /* Build configuration list for PBXNativeTarget "NVMac" */;
+			buildConfigurationList = 426B440D2DEE5C770091BF48 /* Build configuration list for PBXNativeTarget "NVMacRM" */;
 			buildPhases = (
 				426B43FF2DEE5C770091BF48 /* Headers */,
 				426B44002DEE5C770091BF48 /* Sources */,
@@ -146,13 +146,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				426B44062DEE5C770091BF48 /* NVMac */,
+				426B44062DEE5C770091BF48 /* NVMacRM */,
 			);
-			name = NVMac;
+			name = NVMacRM;
 			packageProductDependencies = (
 			);
 			productName = NVMac;
-			productReference = 426B44042DEE5C770091BF48 /* NVMac.kext */;
+			productReference = 426B44042DEE5C770091BF48 /* NVMacRM.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				426B44032DEE5C770091BF48 /* NVMac */,
+				426B44032DEE5C770091BF48 /* NVMacRM */,
 				42F979F22DEE984800BBD8A7 /* nvidia-agnostic-api */,
 			);
 		};
@@ -225,7 +225,7 @@
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
 				DEVELOPMENT_TEAM = NP873NYDVX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NVMac/Info.plist;
+				INFOPLIST_FILE = NVMacRM/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -234,9 +234,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				MODULE_NAME = space.joscomputing.NVMac;
+				MODULE_NAME = space.joscomputing.NVMacRM;
 				MODULE_VERSION = 1.0.0d1;
-				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.NVMac;
+				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.NVMacRM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -257,7 +257,7 @@
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
 				DEVELOPMENT_TEAM = NP873NYDVX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NVMac/Info.plist;
+				INFOPLIST_FILE = NVMacRM/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -266,9 +266,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				MODULE_NAME = space.joscomputing.NVMac;
+				MODULE_NAME = space.joscomputing.NVMacRM;
 				MODULE_VERSION = 1.0.0d1;
-				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.NVMac;
+				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.NVMacRM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -435,7 +435,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		426B440D2DEE5C770091BF48 /* Build configuration list for PBXNativeTarget "NVMac" */ = {
+		426B440D2DEE5C770091BF48 /* Build configuration list for PBXNativeTarget "NVMacRM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				426B440E2DEE5C770091BF48 /* Debug */,
