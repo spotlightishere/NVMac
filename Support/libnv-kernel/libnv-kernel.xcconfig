@@ -1,0 +1,104 @@
+//
+//  libnv-kernel.xcconfig
+//  nv-kernel
+//
+//  Created by Spotlight Deveaux on 2025-06-03.
+//
+
+OSS_MODULE_ROOT = $(PROJECT_DIR)/Support/open-gpu-kernel-modules
+SRC_COMMON = $(OSS_MODULE_ROOT)/src/common
+SRC_NVIDIA = $(OSS_MODULE_ROOT)/src/nvidia
+SRC_LIBSPDM = $(SRC_NVIDIA)/src/libraries/libspdm
+
+
+// There are two sources of includes:
+// 1. libspdm, and
+// 2. nv-kernel.o.
+//
+// libspdm has special include paths.
+// This roughly matches the Makefiel within
+// `src/nvidia/src/libraries/libspdm/nvidia/openspdm.mk`.
+LIBSPDM_VERSION = "3.1.1"
+LIBSPDM_CFLAGS = "-DLIBSPDM_CONFIG=\"nvspdm_rmconfig.h\""
+
+LIBSPDM_INCLUDES = $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/include \
+    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/include/hal \
+    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/os_stub/include \
+    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/os_stub \
+    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/os_stub/cryptlib_null \
+    $(SRC_LIBSPDM)/nvidia
+
+// This roughly matches the Makefile within `src/nvidia/Makefile`.
+NVKERNEL_INCLUDES = $(SRC_NVIDIA)/kernel/inc \
+    $(SRC_NVIDIA)/interface \
+    $(SRC_COMMON)/sdk/nvidia/inc \
+    $(SRC_COMMON)/sdk/nvidia/inc/hw \
+    $(SRC_NVIDIA)/arch/nvalloc/common/inc \
+    $(SRC_NVIDIA)/arch/nvalloc/common/inc/gsp \
+    $(SRC_NVIDIA)/arch/nvalloc/common/inc/deprecated \
+    $(SRC_NVIDIA)/arch/nvalloc/unix/include \
+    $(SRC_NVIDIA)/inc \
+    $(SRC_NVIDIA)/inc/os \
+    $(SRC_COMMON)/shared/inc \
+    $(SRC_COMMON)/shared/msgq/inc \
+    $(SRC_COMMON)/inc \
+    "$(SRC_COMMON)/uproc/os/libos-v2.0.0/include" \
+    $(SRC_COMMON)/uproc/os/common/include \
+    $(SRC_COMMON)/inc/swref \
+    $(SRC_COMMON)/inc/swref/published \
+    $(SRC_NVIDIA)/generated \
+    $(SRC_COMMON)/nvswitch/kernel/inc \
+    $(SRC_COMMON)/nvswitch/interface \
+    $(SRC_COMMON)/nvswitch/common/inc/ \
+    $(SRC_COMMON)/inc/displayport \
+    $(SRC_COMMON)/nvlink/interface/ \
+    $(SRC_COMMON)/nvlink/inband/interface \
+    $(SRC_NVIDIA)/src/mm/uvm/interface \
+    $(SRC_NVIDIA)/inc/libraries \
+    $(SRC_NVIDIA)/src/libraries \
+    $(SRC_NVIDIA)/inc/kernel
+
+HEADER_SEARCH_PATHS = $(NVKERNEL_INCLUDES) $(LIBSPDM_INCLUDES)
+
+
+// The first two macros are our own: Darwin is UNIX and BSD.
+// The other flag saves several thousand warnings.
+CUSTOM_CFLAGS = -DNV_UNIX=1 \
+    -DNV_BSD=1 \
+    -Wno-documentation
+
+// Otherwise, defined macros present in the same Makefile as above.
+MAKEFILE_CFLAGS = -include $(SRC_COMMON)/sdk/nvidia/inc/cpuopsys.h \
+    -D_LANGUAGE_C \
+    -D__NO_CTYPE \
+    -DNVRM \
+    -DLOCK_VAL_ENABLED=0 \
+    -DPORT_ATOMIC_64_BIT_SUPPORTED=1 \
+    -DPORT_IS_KERNEL_BUILD=1 \
+    -DPORT_IS_CHECKED_BUILD=0 \
+    -DPORT_MODULE_atomic=1 \
+    -DPORT_MODULE_core=1 \
+    -DPORT_MODULE_cpu=1 \
+    -DPORT_MODULE_crypto=1 \
+    -DPORT_MODULE_debug=1 \
+    -DPORT_MODULE_memory=1 \
+    -DPORT_MODULE_safe=1 \
+    -DPORT_MODULE_string=1 \
+    -DPORT_MODULE_sync=1 \
+    -DPORT_MODULE_thread=1 \
+    -DPORT_MODULE_util=1 \
+    -DPORT_MODULE_example=0 \
+    -DPORT_MODULE_mmio=0 \
+    -DPORT_MODULE_time=0 \
+    -DRS_STANDALONE=0 \
+    -DRS_STANDALONE_TEST=0 \
+    -DRS_COMPATABILITY_MODE=1 \
+    -DRS_PROVIDES_API_STATE=0 \
+    -DNV_CONTAINERS_NO_TEMPLATES \
+    -DINCLUDE_NVLINK_LIB \
+    -DINCLUDE_NVSWITCH_LIB \
+    -DNV_PRINTF_STRINGS_ALLOWED=1 \
+    -DNV_ASSERT_FAILED_USES_STRINGS=1 \
+    -DPORT_ASSERT_FAILED_USES_STRINGS=1
+
+OTHER_CFLAGS = $(LIBSPDM_CFLAGS) $(CUSTOM_CFLAGS) $(MAKEFILE_CFLAGS)

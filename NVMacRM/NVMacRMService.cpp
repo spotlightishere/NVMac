@@ -6,13 +6,21 @@
 //
 
 #include <IOKit/IOLib.h>
+#include <nvinit.h>
 
 #include "NVMacRMService.hpp"
 
 OSDefineMetaClassAndStructors(NVMacRMService, IOService);
 
-bool NVMacRMService::init(OSDictionary* dict) {
-    return IOService::init();
+bool NVMacRMService::init(OSDictionary* dictionary) {
+    bool superResult = IOService::init(dictionary);
+    if (!superResult) {
+        return false;
+    }
+
+    nv_darwin_init();
+    
+    return true;
 }
 
 void NVMacRMService::free(void) {
