@@ -8,25 +8,7 @@
 OSS_MODULE_ROOT = $(PROJECT_DIR)/Support/open-gpu-kernel-modules
 SRC_COMMON = $(OSS_MODULE_ROOT)/src/common
 SRC_NVIDIA = $(OSS_MODULE_ROOT)/src/nvidia
-SRC_LIBSPDM = $(SRC_NVIDIA)/src/libraries/libspdm
 
-
-// There are two sources of includes:
-// 1. libspdm, and
-// 2. nv-kernel.o.
-//
-// libspdm has special include paths.
-// This roughly matches the Makefiel within
-// `src/nvidia/src/libraries/libspdm/nvidia/openspdm.mk`.
-LIBSPDM_VERSION = "3.1.1"
-LIBSPDM_CFLAGS = "-DLIBSPDM_CONFIG=\"nvspdm_rmconfig.h\""
-
-LIBSPDM_INCLUDES = $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/include \
-    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/include/hal \
-    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/os_stub/include \
-    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/os_stub \
-    $(SRC_LIBSPDM)/$(LIBSPDM_VERSION)/os_stub/cryptlib_null \
-    $(SRC_LIBSPDM)/nvidia
 
 // This roughly matches the Makefile within `src/nvidia/Makefile`.
 NVKERNEL_INCLUDES = $(SRC_NVIDIA)/kernel/inc \
@@ -58,7 +40,7 @@ NVKERNEL_INCLUDES = $(SRC_NVIDIA)/kernel/inc \
     $(SRC_NVIDIA)/src/libraries \
     $(SRC_NVIDIA)/inc/kernel
 
-HEADER_SEARCH_PATHS = $(NVKERNEL_INCLUDES) $(LIBSPDM_INCLUDES)
+HEADER_SEARCH_PATHS = $(NVKERNEL_INCLUDES) 
 
 
 // The first two macros are our own: Darwin is UNIX and BSD.
@@ -101,4 +83,4 @@ MAKEFILE_CFLAGS = -include $(SRC_COMMON)/sdk/nvidia/inc/cpuopsys.h \
     -DNV_ASSERT_FAILED_USES_STRINGS=1 \
     -DPORT_ASSERT_FAILED_USES_STRINGS=1
 
-OTHER_CFLAGS = $(LIBSPDM_CFLAGS) $(CUSTOM_CFLAGS) $(MAKEFILE_CFLAGS)
+OTHER_CFLAGS = $(CUSTOM_CFLAGS) $(MAKEFILE_CFLAGS)

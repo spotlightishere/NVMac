@@ -15,6 +15,9 @@
 #include "PCIHorrorKit.h"
 #include "nv_darwin.h"
 
+/// Global state for the control device.
+nv_darwin_state_t nv_ctl_device = { { 0 } };
+
 kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     // Console logs appear to fail without this.
     // TODO(spotlightishere): Eventually clean this up...
@@ -26,7 +29,18 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         return ret;
     }
 
+    // Here goes nothing...
     nvd_log("Hello, world!");
+    // We will never have a seperate stack.
+    nvidia_stack_t* sp = NULL;
+    rm_init_rm(sp);
+    
+    // Inform the RM of our OS-specific state.
+    nv_state_t *nv = NV_STATE_PTR(&nv_ctl_device);
+    nv->os_state = (void*)&nv_ctl_device;
+    
+//    char* result = rm_get_gpu_uuid(sp, nv);
+
     return ret;
 }
 
