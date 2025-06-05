@@ -13,20 +13,24 @@
 #include <PCIDriverKit/PCIDriverKit.h>
 
 #include "PCIHorrorKit.h"
+#include "nv_darwin.h"
 
-kern_return_t IMPL(PCIHorrorKit, Start) {
-    kern_return_t ret;
-    ret = Start(provider, SUPERDISPATCH);
-
+kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     // Console logs appear to fail without this.
     // TODO(spotlightishere): Eventually clean this up...
     IOSleep(500);
-    os_log(OS_LOG_DEFAULT, "PCIHorrorKit: Hello World");
+
+    kern_return_t ret = Start(provider, SUPERDISPATCH);
+    if (ret != KERN_SUCCESS) {
+        nvd_log("Error while starting service (return code %d)", ret);
+        return ret;
+    }
+
+    nvd_log("Hello, world!");
     return ret;
 }
 
-kern_return_t IMPL(PCIHorrorKit, Stop) {
-    os_log(OS_LOG_DEFAULT, "PCIHorrorKit: Stop");
-
+kern_return_t PCIHorrorKit::Stop_Impl(IOService* provider) {
+    nvd_log("Stopping service...");
     return Stop(provider, SUPERDISPATCH);
 }
