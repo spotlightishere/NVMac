@@ -19,7 +19,7 @@ bool NVMacRMService::init(OSDictionary* dictionary) {
     }
 
     nv_darwin_init();
-    
+
     return true;
 }
 

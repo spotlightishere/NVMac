@@ -1,0 +1,21 @@
+//
+//  PCIHorrorKit.iig
+//  PCIHorrorKit
+//
+//  Created by Spotlight Deveaux on 2025-06-03.
+//
+
+#ifndef PCIHorrorKit_h
+#define PCIHorrorKit_h
+
+#include <Availability.h>
+#include <DriverKit/IOService.iig>
+#include <PCIDriverKit/IOPCIDevice.iig>
+
+class PCIHorrorKit : public IOPCIDevice {
+  public:
+    virtual kern_return_t Start(IOService* provider) override;
+    virtual kern_return_t Stop(IOService* provider) override;
+};
+
+#endif /* PCIHorrorKit_h */

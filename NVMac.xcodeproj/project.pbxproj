@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4239C8052DEEE857008481B4 /* libnv-kernel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B5F7912DEECC6B00551B8F /* libnv-kernel.a */; };
 		4253FC9B2DEE941D006EC86E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4253FC9A2DEE941D006EC86E /* README.md */; };
+		4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4239C81E2DEEE9A2008481B4 /* DriverKit.framework */; };
+		4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -19,11 +22,35 @@
 			remoteGlobalIDString = 42B5F7902DEECC6B00551B8F;
 			remoteInfo = "nv-kernel";
 		};
+		4254DC4E2DEFFA2F00871F6B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 426B43FB2DEE5C770091BF48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4254DC452DEFFA2F00871F6B;
+			remoteInfo = PCIHorrorKit;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4254DC552DEFFA2F00871F6B /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4239C81E2DEEE9A2008481B4 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
 		4253FC9A2DEE941D006EC86E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4254DC352DEFFA2000871F6B /* PCIHorror.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCIHorror.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = space.joscomputing.PCIHorror.PCIHorrorKit.dext; sourceTree = BUILT_PRODUCTS_DIR; };
+		4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCIDriverKit.framework; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/System/Library/Frameworks/PCIDriverKit.framework; sourceTree = DEVELOPER_DIR; };
 		426B44042DEE5C770091BF48 /* NVMacRM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NVMacRM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		426B441F2DEE64510091BF48 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = usr/lib/libkmod.a; sourceTree = SDKROOT; };
 		4292AB6B2DEECFED00502C91 /* g_nvid_string.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = g_nvid_string.c; sourceTree = "<group>"; };
@@ -33,6 +60,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4254DC512DEFFA2F00871F6B /* Exceptions for "PCIHorrorKit" folder in "PCIHorrorKit" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4254DC452DEFFA2F00871F6B /* PCIHorrorKit */;
+		};
 		426B440C2DEE5C770091BF48 /* Exceptions for "NVMacRM" folder in "NVMacRM" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -2056,6 +2090,19 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		4254DC362DEFFA2000871F6B /* PCIHorror */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PCIHorror;
+			sourceTree = "<group>";
+		};
+		4254DC482DEFFA2F00871F6B /* PCIHorrorKit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4254DC512DEFFA2F00871F6B /* Exceptions for "PCIHorrorKit" folder in "PCIHorrorKit" target */,
+			);
+			path = PCIHorrorKit;
+			sourceTree = "<group>";
+		};
 		426B44062DEE5C770091BF48 /* NVMacRM */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -2085,6 +2132,22 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4254DC322DEFFA2000871F6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4254DC432DEFFA2F00871F6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */,
+				4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		426B44012DEE5C770091BF48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2108,6 +2171,7 @@
 			children = (
 				4253FC9A2DEE941D006EC86E /* README.md */,
 				426B44062DEE5C770091BF48 /* NVMacRM */,
+				4254DC482DEFFA2F00871F6B /* PCIHorrorKit */,
 				42F99BA12DEE9DF800BBD8A7 /* Support */,
 				426B441E2DEE64510091BF48 /* Frameworks */,
 				426B44052DEE5C770091BF48 /* Products */,
@@ -2119,6 +2183,8 @@
 			children = (
 				426B44042DEE5C770091BF48 /* NVMacRM.kext */,
 				42B5F7912DEECC6B00551B8F /* libnv-kernel.a */,
+				4254DC352DEFFA2000871F6B /* PCIHorror.app */,
+				4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2126,6 +2192,7 @@
 		426B441E2DEE64510091BF48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */,
 				426B441F2DEE64510091BF48 /* libkmod.a */,
 				4239C81E2DEEE9A2008481B4 /* DriverKit.framework */,
 			);
@@ -2156,6 +2223,7 @@
 			isa = PBXGroup;
 			children = (
 				42F97F3B2DEE9DF800BBD8A7 /* libnv-kernel */,
+				4254DC362DEFFA2000871F6B /* PCIHorror */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -2163,6 +2231,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		4254DC412DEFFA2F00871F6B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		426B43FF2DEE5C770091BF48 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2180,6 +2255,53 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		4254DC342DEFFA2000871F6B /* PCIHorror */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4254DC3E2DEFFA2100871F6B /* Build configuration list for PBXNativeTarget "PCIHorror" */;
+			buildPhases = (
+				4254DC312DEFFA2000871F6B /* Sources */,
+				4254DC322DEFFA2000871F6B /* Frameworks */,
+				4254DC332DEFFA2000871F6B /* Resources */,
+				4254DC552DEFFA2F00871F6B /* Embed System Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4254DC4F2DEFFA2F00871F6B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4254DC362DEFFA2000871F6B /* PCIHorror */,
+			);
+			name = PCIHorror;
+			packageProductDependencies = (
+			);
+			productName = PCIHorror;
+			productReference = 4254DC352DEFFA2000871F6B /* PCIHorror.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4254DC452DEFFA2F00871F6B /* PCIHorrorKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4254DC522DEFFA2F00871F6B /* Build configuration list for PBXNativeTarget "PCIHorrorKit" */;
+			buildPhases = (
+				4254DC412DEFFA2F00871F6B /* Headers */,
+				4254DC422DEFFA2F00871F6B /* Sources */,
+				4254DC432DEFFA2F00871F6B /* Frameworks */,
+				4254DC442DEFFA2F00871F6B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4254DC482DEFFA2F00871F6B /* PCIHorrorKit */,
+			);
+			name = PCIHorrorKit;
+			packageProductDependencies = (
+			);
+			productName = PCIHorrorKit;
+			productReference = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */;
+			productType = "com.apple.product-type.driver-extension";
+		};
 		426B44032DEE5C770091BF48 /* NVMacRM */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 426B440D2DEE5C770091BF48 /* Build configuration list for PBXNativeTarget "NVMacRM" */;
@@ -2237,6 +2359,12 @@
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
+					4254DC342DEFFA2000871F6B = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					4254DC452DEFFA2F00871F6B = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					426B44032DEE5C770091BF48 = {
 						CreatedOnToolsVersion = 16.4;
 						LastSwiftMigration = 1640;
@@ -2261,11 +2389,27 @@
 			targets = (
 				426B44032DEE5C770091BF48 /* NVMacRM */,
 				42B5F7902DEECC6B00551B8F /* nv-kernel */,
+				4254DC342DEFFA2000871F6B /* PCIHorror */,
+				4254DC452DEFFA2F00871F6B /* PCIHorrorKit */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4254DC332DEFFA2000871F6B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4254DC442DEFFA2F00871F6B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		426B44022DEE5C770091BF48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2277,6 +2421,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4254DC312DEFFA2000871F6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4254DC422DEFFA2F00871F6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		426B44002DEE5C770091BF48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2299,9 +2457,129 @@
 			target = 42B5F7902DEECC6B00551B8F /* nv-kernel */;
 			targetProxy = 4239C8062DEEE857008481B4 /* PBXContainerItemProxy */;
 		};
+		4254DC4F2DEFFA2F00871F6B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4254DC452DEFFA2F00871F6B /* PCIHorrorKit */;
+			targetProxy = 4254DC4E2DEFFA2F00871F6B /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		4254DC3F2DEFFA2100871F6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Support/PCIHorror/PCIHorror.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4254DC402DEFFA2100871F6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Support/PCIHorror/PCIHorror.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4254DC532DEFFA2F00871F6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = Yes;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/PCIHorrorKit/PCIHorrorKit.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DRIVERKIT_DEPLOYMENT_TARGET = 24.5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/DriverKit/System/Library/Frameworks",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PCIHorrorKit/Info.plist;
+				INFOPLIST_KEY_OSBundleUsageDescription = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror.PCIHorrorKit;
+				PRODUCT_NAME = "$(inherited)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = driverkit;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4254DC542DEFFA2F00871F6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = Yes;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/PCIHorrorKit/PCIHorrorKit.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DRIVERKIT_DEPLOYMENT_TARGET = 24.5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/DriverKit/System/Library/Frameworks",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PCIHorrorKit/Info.plist;
+				INFOPLIST_KEY_OSBundleUsageDescription = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror.PCIHorrorKit;
+				PRODUCT_NAME = "$(inherited)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = driverkit;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
 		426B440E2DEE5C770091BF48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 42B5F7952DEECDAF00551B8F /* libnv-kernel.xcconfig */;
@@ -2529,6 +2807,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4254DC3E2DEFFA2100871F6B /* Build configuration list for PBXNativeTarget "PCIHorror" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4254DC3F2DEFFA2100871F6B /* Debug */,
+				4254DC402DEFFA2100871F6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4254DC522DEFFA2F00871F6B /* Build configuration list for PBXNativeTarget "PCIHorrorKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4254DC532DEFFA2F00871F6B /* Debug */,
+				4254DC542DEFFA2F00871F6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		426B43FE2DEE5C770091BF48 /* Build configuration list for PBXProject "NVMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -10,4 +10,10 @@
 
 #include <nv.h>
 
+typedef struct nv_darwin_state_s {
+    nv_state_t nv_state;
+} nv_darwin_state_t;
+
+#define NV_STATE_PTR(nvd) &(((nv_darwin_state_t*)(nvd))->nv_state)
+
 #endif /* nv_darwin_h */
