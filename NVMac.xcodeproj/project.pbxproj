@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4206B3C02DF14F910052D241 /* libspdm-polyfill.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4206B3652DF14D3F0052D241 /* libspdm-polyfill.a */; };
 		4206B3C32DF14F970052D241 /* libspdm-polyfill.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4206B3652DF14D3F0052D241 /* libspdm-polyfill.a */; };
+		4219728D2DF15E87004A3F58 /* libnv-darwin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4206B4012DF15DD60052D241 /* libnv-darwin.a */; };
+		421972902DF15E92004A3F58 /* libnv-darwin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4206B4012DF15DD60052D241 /* libnv-darwin.a */; };
 		4253FC9B2DEE941D006EC86E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4253FC9A2DEE941D006EC86E /* README.md */; };
 		4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4239C81E2DEEE9A2008481B4 /* DriverKit.framework */; };
 		4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -31,6 +33,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4206B3642DF14D3F0052D241;
 			remoteInfo = "spdm-polyfill";
+		};
+		4219728E2DF15E87004A3F58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 426B43FB2DEE5C770091BF48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4206B4002DF15DD60052D241;
+			remoteInfo = "nv-darwin";
+		};
+		421972912DF15E92004A3F58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 426B43FB2DEE5C770091BF48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4206B4002DF15DD60052D241;
+			remoteInfo = "nv-darwin";
 		};
 		4254DC4E2DEFFA2F00871F6B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -57,6 +73,7 @@
 
 /* Begin PBXFileReference section */
 		4206B3652DF14D3F0052D241 /* libspdm-polyfill.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libspdm-polyfill.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4206B4012DF15DD60052D241 /* libnv-darwin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libnv-darwin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4239C81E2DEEE9A2008481B4 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
 		4253FC9A2DEE941D006EC86E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4254DC352DEFFA2000871F6B /* PCIHorror.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCIHorror.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +125,30 @@
 			);
 			target = 4254DC342DEFFA2000871F6B /* PCIHorror */;
 		};
+		421972982DF16280004A3F58 /* Exceptions for "libnv-darwin" folder in "nv-darwin" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				acpi.cpp,
+				libc.cpp,
+				nv_darwin.h,
+				nvlink.cpp,
+			);
+			target = 4206B4002DF15DD60052D241 /* nv-darwin */;
+		};
+		4219729D2DF1650C004A3F58 /* Exceptions for "libnv-darwin" folder in "NVMacRM" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				nv_darwin.h,
+			);
+			target = 426B44032DEE5C770091BF48 /* NVMacRM */;
+		};
+		4219729E2DF1650C004A3F58 /* Exceptions for "libnv-darwin" folder in "PCIHorrorKit" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				nv_darwin.h,
+			);
+			target = 4254DC452DEFFA2F00871F6B /* PCIHorrorKit */;
+		};
 		4254DC512DEFFA2F00871F6B /* Exceptions for "PCIHorrorKit" folder in "PCIHorrorKit" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -132,6 +173,16 @@
 				4206B39B2DF14E970052D241 /* Exceptions for "libspdm-polyfill" folder in "spdm-polyfill" target */,
 			);
 			path = "libspdm-polyfill";
+			sourceTree = "<group>";
+		};
+		4206B4052DF15DDA0052D241 /* libnv-darwin */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4219729D2DF1650C004A3F58 /* Exceptions for "libnv-darwin" folder in "NVMacRM" target */,
+				4219729E2DF1650C004A3F58 /* Exceptions for "libnv-darwin" folder in "PCIHorrorKit" target */,
+				421972982DF16280004A3F58 /* Exceptions for "libnv-darwin" folder in "nv-darwin" target */,
+			);
+			path = "libnv-darwin";
 			sourceTree = "<group>";
 		};
 		4254DC362DEFFA2000871F6B /* PCIHorror */ = {
@@ -165,6 +216,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4206B3FF2DF15DD60052D241 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4254DC322DEFFA2000871F6B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -179,6 +237,7 @@
 				4206B3C32DF14F970052D241 /* libspdm-polyfill.a in Frameworks */,
 				4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */,
 				4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */,
+				421972902DF15E92004A3F58 /* libnv-darwin.a in Frameworks */,
 				4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4206B3C02DF14F910052D241 /* libspdm-polyfill.a in Frameworks */,
+				4219728D2DF15E87004A3F58 /* libnv-darwin.a in Frameworks */,
 				4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -216,6 +276,7 @@
 				4254DC352DEFFA2000871F6B /* PCIHorror.app */,
 				4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */,
 				4206B3652DF14D3F0052D241 /* libspdm-polyfill.a */,
+				4206B4012DF15DD60052D241 /* libnv-darwin.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -244,6 +305,7 @@
 			isa = PBXGroup;
 			children = (
 				4206B3692DF14D490052D241 /* libspdm-polyfill */,
+				4206B4052DF15DDA0052D241 /* libnv-darwin */,
 				42F97F3B2DEE9DF800BBD8A7 /* libnv-kernel */,
 				4254DC362DEFFA2000871F6B /* PCIHorror */,
 			);
@@ -254,6 +316,13 @@
 
 /* Begin PBXHeadersBuildPhase section */
 		4206B3612DF14D3F0052D241 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4206B3FD2DF15DD60052D241 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -331,6 +400,25 @@
 			productReference = 4206B3652DF14D3F0052D241 /* libspdm-polyfill.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		4206B4002DF15DD60052D241 /* nv-darwin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4206B4022DF15DD60052D241 /* Build configuration list for PBXNativeTarget "nv-darwin" */;
+			buildPhases = (
+				4206B3FD2DF15DD60052D241 /* Headers */,
+				4206B3FE2DF15DD60052D241 /* Sources */,
+				4206B3FF2DF15DD60052D241 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "nv-darwin";
+			packageProductDependencies = (
+			);
+			productName = "nv-darwin";
+			productReference = 4206B4012DF15DD60052D241 /* libnv-darwin.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		4254DC342DEFFA2000871F6B /* PCIHorror */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4254DC3E2DEFFA2100871F6B /* Build configuration list for PBXNativeTarget "PCIHorror" */;
@@ -347,6 +435,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				4206B3692DF14D490052D241 /* libspdm-polyfill */,
+				4206B4052DF15DDA0052D241 /* libnv-darwin */,
 				4254DC362DEFFA2000871F6B /* PCIHorror */,
 			);
 			name = PCIHorror;
@@ -369,6 +458,7 @@
 			);
 			dependencies = (
 				4206B3C52DF14F980052D241 /* PBXTargetDependency */,
+				421972922DF15E92004A3F58 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4254DC482DEFFA2F00871F6B /* PCIHorrorKit */,
@@ -393,6 +483,7 @@
 			);
 			dependencies = (
 				4206B3C22DF14F910052D241 /* PBXTargetDependency */,
+				4219728F2DF15E87004A3F58 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				426B44062DEE5C770091BF48 /* NVMacRM */,
@@ -415,6 +506,9 @@
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					4206B3642DF14D3F0052D241 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					4206B4002DF15DD60052D241 = {
 						CreatedOnToolsVersion = 16.4;
 					};
 					4254DC342DEFFA2000871F6B = {
@@ -452,6 +546,7 @@
 				4261A7DE2DF13C6A00544179 /* libnv-kernel-macosx */,
 				4261A8052DF1428E00544179 /* libnv-kernel-driverkit */,
 				4206B3642DF14D3F0052D241 /* spdm-polyfill */,
+				4206B4002DF15DD60052D241 /* nv-darwin */,
 			);
 		};
 /* End PBXProject section */
@@ -483,6 +578,13 @@
 
 /* Begin PBXSourcesBuildPhase section */
 		4206B3622DF14D3F0052D241 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4206B3FE2DF15DD60052D241 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -523,6 +625,16 @@
 			target = 4206B3642DF14D3F0052D241 /* spdm-polyfill */;
 			targetProxy = 4206B3C42DF14F980052D241 /* PBXContainerItemProxy */;
 		};
+		4219728F2DF15E87004A3F58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4206B4002DF15DD60052D241 /* nv-darwin */;
+			targetProxy = 4219728E2DF15E87004A3F58 /* PBXContainerItemProxy */;
+		};
+		421972922DF15E92004A3F58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4206B4002DF15DD60052D241 /* nv-darwin */;
+			targetProxy = 421972912DF15E92004A3F58 /* PBXContainerItemProxy */;
+		};
 		4254DC4F2DEFFA2F00871F6B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4254DC452DEFFA2F00871F6B /* PCIHorrorKit */;
@@ -558,6 +670,36 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "driverkit macosx";
 				SUPPORTS_MACCATALYST = NO;
+			};
+			name = Release;
+		};
+		4206B4032DF15DD60052D241 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NP873NYDVX;
+				DRIVERKIT_DEPLOYMENT_TARGET = 24.5;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = driverkit;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4206B4042DF15DD60052D241 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NP873NYDVX;
+				DRIVERKIT_DEPLOYMENT_TARGET = 24.5;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = driverkit;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -944,6 +1086,15 @@
 			buildConfigurations = (
 				4206B3672DF14D3F0052D241 /* Debug */,
 				4206B3682DF14D3F0052D241 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4206B4022DF15DD60052D241 /* Build configuration list for PBXNativeTarget "nv-darwin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4206B4032DF15DD60052D241 /* Debug */,
+				4206B4042DF15DD60052D241 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

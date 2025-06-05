@@ -1,6 +1,6 @@
 //
 //  nv_darwin.h
-//  PCIHorrorKit
+//  nv-darwin
 //
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
@@ -10,9 +10,16 @@
 
 #include <os/log.h>
 
+#ifdef __cplusplus
 extern "C" {
+#endif
+
+// libnv-kernel uses C linkage.
 #include <nv.h>
+
+#ifdef __cplusplus
 }
+#endif
 
 typedef struct nv_darwin_state_s {
     nv_state_t nv_state;
