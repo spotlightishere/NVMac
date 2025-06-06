@@ -166,6 +166,11 @@ NvBool os_check_access(RsAccessRight accessRight) {
     return NV_TRUE;
 }
 
+NvBool os_is_isr(void)
+{
+    return NV_FALSE;
+}
+
 #pragma mark - Memory
 
 NV_STATUS os_get_page(NvU64 address) {

@@ -103,3 +103,54 @@ NV_STATUS os_cond_acquire_mutex(void* pMutex) {
 void os_release_mutex(void* pMutex) {
     pthread_mutex_unlock((pthread_mutex_t*)pMutex);
 }
+
+#pragma mark - R/W Lock
+
+void* NV_API_CALL os_alloc_rwlock(void)
+{
+    void* rwlock = IOMalloc(sizeof(pthread_rwlock_t));
+    pthread_rwlock_init((pthread_rwlock_t*)rwlock, NULL);
+    return rwlock;
+}
+
+void os_free_rwlock(void *pRwLock) {
+    IOFree(pRwLock, sizeof(pthread_rwlock_t));
+}
+
+NV_STATUS os_acquire_rwlock_read(void* pRwLock) {
+    pthread_rwlock_rdlock((pthread_rwlock_t*)pRwLock);
+    return NV_OK;
+}
+
+NV_STATUS os_acquire_rwlock_write(void* pRwLock) {
+    pthread_rwlock_wrlock((pthread_rwlock_t*)pRwLock);
+    return NV_OK;
+}
+
+NV_STATUS os_cond_acquire_rwlock_read(void* pRwLock) {
+    int result = pthread_rwlock_tryrdlock((pthread_rwlock_t *)pRwLock);
+    if (result == 0) {
+        return NV_OK;
+    } else {
+        return NV_ERR_TIMEOUT_RETRY;
+    }
+
+}
+
+NV_STATUS os_cond_acquire_rwlock_write(void* pRwLock) {
+    int result = pthread_rwlock_tryrdlock((pthread_rwlock_t *)pRwLock);
+    if (result == 0) {
+        return NV_OK;
+    } else {
+        return NV_ERR_TIMEOUT_RETRY;
+    }
+
+}
+
+void os_release_rwlock_read(void* pRwLock) {
+    pthread_rwlock_unlock((pthread_rwlock_t*)pRwLock);
+}
+
+void os_release_rwlock_write(void* pRwLock) {
+    pthread_rwlock_unlock((pthread_rwlock_t*)pRwLock);
+}

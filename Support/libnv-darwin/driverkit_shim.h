@@ -51,6 +51,27 @@ int pthread_mutex_lock(pthread_mutex_t* mutex);
 int pthread_mutex_trylock(pthread_mutex_t* mutex);
 int pthread_mutex_unlock(pthread_mutex_t* mutex);
 
+#pragma mark - pthread rw lock
+
+typedef struct pthread_rwlock_s {
+    long sig;
+    _pthread_lock lock;
+    uint32_t unused : 29, misalign : 1, pshared : 2;
+    uint32_t rw_flags;
+    uint32_t _pad;
+    uint32_t rw_tid[2];
+    uint32_t rw_seq[4];
+    uint32_t rw_mis[4];
+    uint32_t _reserved[34];
+} pthread_rwlock_t;
+
+int pthread_rwlock_init(pthread_rwlock_t* rwlock, void* attr);
+int pthread_rwlock_rdlock(pthread_rwlock_t* rwlock);
+int pthread_rwlock_tryrdlock(pthread_rwlock_t* rwlock);
+int pthread_rwlock_wrlock(pthread_rwlock_t* rwlock);
+int pthread_rwlock_trywrlock(pthread_rwlock_t* rwlock);
+int pthread_rwlock_unlock(pthread_rwlock_t* rwlock);
+
 #ifdef __cplusplus
 }
 #endif
