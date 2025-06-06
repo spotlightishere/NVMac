@@ -6,38 +6,8 @@
 //
 
 #include "nv_darwin.h"
-#include <cstdlib>
-#include <map>
-#include <string>
-
-// TODO(spotlightishere): There's no way this will scale
-static std::map<void*, uint64_t> global_allocations{};
-
-extern "C" {
-
-#pragma mark - Memory Management
-
-NV_STATUS os_alloc_mem(void** address, NvU64 size) {
-    void* ptr = IOMalloc(size);
-    if (ptr == NULL) {
-        return NV_ERR_NO_MEMORY;
-    }
-    
-    global_allocations[ptr] = size;
-    *address = ptr;
-    return NV_OK;
-}
-
-void os_free_mem(void* ptr) {
-    if (global_allocations.contains(ptr) == false) {
-        panic("Allocation was freed for pointer that does not exist!");
-    }
-    
-    uint64_t allocation_size = global_allocations[ptr];
-    IOFree(ptr, allocation_size);
-    
-    global_allocations.erase(ptr);
-}
+#include <stdio.h>
+#include <string.h>
 
 #pragma mark - Strings
 
@@ -49,19 +19,8 @@ void* os_mem_copy(void* dst, const void* src, NvU32 length) {
     return memcpy(dst, src, length);
 }
 
-// TODO(spotlightishere): the compiler is optimizing
-// all calls to `memset` to this function for some reason,
-// and I am struggling to diagnose why.
-//
-// Instead, please take this manual version.
 void* os_mem_set(void* dst, NvU8 c, NvU32 length) {
-    char* tmp = (char*)dst;
-    
-    for (int i = 0; i < length; i++) {
-        tmp[i] = c;
-    }
-    
-    return dst;
+    return memset(dst, c, length);
 }
 
 char* os_string_copy(char* dst, const char* src) {
@@ -84,7 +43,7 @@ NvS32 os_snprintf(char* str, NvU32 size, const char* fmt, ...) {
     va_start(args, fmt);
     NvS32 result = snprintf(str, size, fmt, args);
     va_end(args);
-    
+
     return result;
 }
 
@@ -92,16 +51,16 @@ NvU32 os_strtoul(const char* str, char** endptr, NvU32 base) {
     return (NvU32)strtoul(str, endptr, base);
 }
 
-#pragma mark - Locks, mutexes
+#pragma mark - Spinlock
 
 NV_STATUS os_alloc_spinlock(void** ppSpinlock) {
-    void* spinlock = IOMallocZero(sizeof(os_unfair_lock_s));
+    void* spinlock = IOMallocZero(sizeof(os_unfair_lock));
     *ppSpinlock = spinlock;
     return NV_OK;
 }
 
 void os_free_spinlock(void* pSpinlock) {
-    IOFree(pSpinlock, sizeof(os_unfair_lock_s));
+    IOFree(pSpinlock, sizeof(os_unfair_lock));
 }
 
 // Return value are flags that we do not respect.
@@ -113,4 +72,34 @@ NvU64 os_acquire_spinlock(void* pSpinlock) {
 void os_release_spinlock(void* pSpinlock, NvU64 oldIrql) {
     os_unfair_lock_unlock((os_unfair_lock_t)pSpinlock);
 }
+
+#pragma mark - Mutex
+
+NV_STATUS os_alloc_mutex(void** ppMutex) {
+    void* mutex = IOMalloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init((pthread_mutex_t*)mutex, NULL);
+    *ppMutex = mutex;
+    return NV_OK;
+}
+
+void os_free_mutex(void* pMutex) {
+    IOFree(pMutex, sizeof(pthread_mutex_t));
+}
+
+NV_STATUS os_acquire_mutex(void* pMutex) {
+    pthread_mutex_lock((pthread_mutex_t*)pMutex);
+    return NV_OK;
+}
+
+NV_STATUS os_cond_acquire_mutex(void* pMutex) {
+    int result = pthread_mutex_trylock((pthread_mutex_t*)pMutex);
+    if (result == 0) {
+        return NV_OK;
+    } else {
+        return NV_ERR_TIMEOUT_RETRY;
+    }
+}
+
+void os_release_mutex(void* pMutex) {
+    pthread_mutex_unlock((pthread_mutex_t*)pMutex);
 }

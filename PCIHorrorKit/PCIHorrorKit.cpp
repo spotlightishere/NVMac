@@ -39,7 +39,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     nv_state_t *nv = NV_STATE_PTR(&nv_ctl_device);
     nv->os_state = (void*)&nv_ctl_device;
     
-//    char* result = rm_get_gpu_uuid(sp, nv);
+    char* result = rm_get_gpu_uuid(sp, nv);
 
     return ret;
 }
