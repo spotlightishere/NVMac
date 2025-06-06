@@ -1,15 +1,19 @@
 //
-//  lmao.c
+//  stubs.c
 //  nv-darwin
 //
 //  Created by Spotlight Deveaux on 2025-06-05.
 //
 
+#if TARGET_OS_DRIVERKIT
 #include <DriverKit/IOLib.h>
+#else
+#include <IOKit/IOLib.h>
+#endif
 
 #define STUBBED(name)                                                          \
     void name(void) {                                                          \
-        IOLog("Stubbed function");                                             \
+        IOLog("Stubbed function " #name);                                      \
     }
 
 STUBBED(nv_acquire_fabric_mgmt_cap)
