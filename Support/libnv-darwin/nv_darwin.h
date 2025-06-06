@@ -33,11 +33,20 @@ extern "C" {
 
 typedef struct nv_darwin_state_s {
     nv_state_t nv_state;
-} nv_darwin_state_t;
+    // Actually an IOPCIDevice.
+    void* device;
+}* nv_darwin_state_t;
 
 /// Helper macro to allow accessing the global `nv_state_t`
 /// within our global `nv_darwin_state_t.`
-#define NV_STATE_PTR(nvd) &(((nv_darwin_state_t*)(nvd))->nv_state)
+#define NV_STATE_PTR &(((nv_darwin_state_t)(nvd_state))->nv_state)
+
+/// Given that `IOPCIDevice` is a C++ class, it cannot be used in C code.
+/// This macro simply casts the ambiguous `void*` to `IOPCIDevice*`.
+///
+/// As such, it requires that you have imported the appropriate
+/// type for using `IOPCIDevice`, via `PCIDriverKit` or `IOKit` itself.
+#define NV_GLOBAL_DEVICE ((IOPCIDevice*)nvd_state->device)
 
 /// Helper macro to allow logging via the default `os_log`.
 #define nvd_log(fmt, ...) os_log(OS_LOG_DEFAULT, (fmt), ##__VA_ARGS__)

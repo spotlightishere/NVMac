@@ -14,6 +14,8 @@
 
 class PCIHorrorKit : public IOPCIDevice {
   public:
+    bool init() override;
+    void free() override;
     virtual kern_return_t Start(IOService* provider) override;
     virtual kern_return_t Stop(IOService* provider) override;
 };

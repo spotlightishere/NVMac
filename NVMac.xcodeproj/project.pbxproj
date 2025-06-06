@@ -17,6 +17,7 @@
 		4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80D2DF1451600544179 /* nv-kernel-macosx.a */; };
 		427A91472DF324E800CB6C21 /* libsystem_pthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */; };
 		427A914B2DF3284700CB6C21 /* libsystem_c.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A914A2DF3284200CB6C21 /* libsystem_c.tbd */; };
+		427A91522DF3521500CB6C21 /* libsystem_kernel.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_pthread.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_pthread.tbd; sourceTree = DEVELOPER_DIR; };
 		427A91482DF3281F00CB6C21 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/libSystem.tbd; sourceTree = DEVELOPER_DIR; };
 		427A914A2DF3284200CB6C21 /* libsystem_c.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_c.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_c.tbd; sourceTree = DEVELOPER_DIR; };
+		427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_kernel.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_kernel.tbd; sourceTree = DEVELOPER_DIR; };
 		42F99BAE2DEE9E7500BBD8A7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,6 +91,7 @@
 				acpi.cpp,
 				debug.cpp,
 				driverkit_shim.h,
+				iokit.cpp,
 				libc_cpp.cpp,
 				libc.c,
 				nv_darwin.h,
@@ -107,6 +110,7 @@
 				acpi.cpp,
 				debug.cpp,
 				driverkit_shim.h,
+				iokit.cpp,
 				libc_cpp.cpp,
 				libc.c,
 				nv_darwin.h,
@@ -124,6 +128,7 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
+				iokit.cpp,
 				libc_cpp.cpp,
 				libc.c,
 				nvlink.cpp,
@@ -249,6 +254,7 @@
 				425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */,
 				427A91472DF324E800CB6C21 /* libsystem_pthread.tbd in Frameworks */,
 				4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */,
+				427A91522DF3521500CB6C21 /* libsystem_kernel.tbd in Frameworks */,
 				427A914B2DF3284700CB6C21 /* libsystem_c.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,6 +298,7 @@
 		426B441E2DEE64510091BF48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */,
 				427A914A2DF3284200CB6C21 /* libsystem_c.tbd */,
 				427A91482DF3281F00CB6C21 /* libSystem.tbd */,
 				427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */,

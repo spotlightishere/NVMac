@@ -166,8 +166,7 @@ NvBool os_check_access(RsAccessRight accessRight) {
     return NV_TRUE;
 }
 
-NvBool os_is_isr(void)
-{
+NvBool os_is_isr(void) {
     return NV_FALSE;
 }
 

@@ -8,9 +8,26 @@
 #ifndef driverkit_shim_h
 #define driverkit_shim_h
 
+// Necessary for `mach_port_t`.
+#include <DriverKit/IORPC.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#pragma mark - Mach types
+
+// https://github.com/apple-oss-distributions/xnu/blob/e3723e1f17661b24996789d8afc084c0c3303b26/osfmk/mach/clock_types.h#L56-L65
+typedef int clock_res_t;
+struct mach_timespec {
+    unsigned int tv_sec; /* seconds */
+    clock_res_t tv_nsec; /* nanoseconds */
+};
+typedef struct mach_timespec mach_timespec_t;
+
+// We'll need access to our own Mach port for semaphores.
+typedef mach_port_t task_t;
+task_t mach_task_self(void);
 
 #pragma mark - os_unfair_lock
 
@@ -71,6 +88,30 @@ int pthread_rwlock_tryrdlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_wrlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_trywrlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_unlock(pthread_rwlock_t* rwlock);
+
+#pragma mark - Semaphore
+
+// A `semaphore_t` is an `mach_port_t` within userspace:
+// https://github.com/apple-oss-distributions/xnu/blob/e3723e1f17661b24996789d8afc084c0c3303b26/osfmk/mach/mach_types.h#L172-L175
+// DriverKit is in an odd position where it does get a Mach port.
+//
+// A `mach_port_t` is an `uint32_t`.
+// As we (ab)use casting between the two with semaphores,
+// let us instead define semaphore_t as a `uint64_t`.
+// (This avoids the compiler giving a warning.)
+typedef uint64_t semaphore_t;
+
+// Used for `semaphore_timedwait`.
+// https://github.com/apple-oss-distributions/xnu/blob/e3723e1f17661b24996789d8afc084c0c3303b26/osfmk/mach/kern_return.h#L309
+#define KERN_OPERATION_TIMED_OUT 49
+
+kern_return_t semaphore_create(task_t task, semaphore_t* semaphore, int policy,
+                               int value);
+kern_return_t semaphore_wait(semaphore_t semaphore);
+kern_return_t semaphore_timedwait(semaphore_t semaphore,
+                                  mach_timespec_t wait_time);
+kern_return_t semaphore_signal(semaphore_t semaphore);
+kern_return_t semaphore_destroy(task_t task, semaphore_t semaphore);
 
 #ifdef __cplusplus
 }
