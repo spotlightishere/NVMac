@@ -32,7 +32,7 @@ int nv_printf(NvU32 debuglevel, const char* printf_format, ...) {
 }
 
 void os_bug_check(NvU32 bugCode, const char* bugCodeStr) {
-    panic("%s", bugCodeStr);
+    nvd_log("panic: %s", bugCodeStr);
 }
 
 #pragma mark - Debugging

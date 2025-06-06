@@ -6,6 +6,8 @@
 //
 
 #include "nv_darwin.h"
+#include <DriverKit/IOMemoryMap.h>
+#include <PCIDriverKit/PCIDriverKit.h>
 #include <cstdlib>
 #include <time.h>
 
@@ -172,6 +174,11 @@ NvBool os_is_isr(void) {
 
 #pragma mark - Memory
 
+// TODO(spotlightishere): This is hardcoded
+NvU32 os_page_size = 4096;
+NvU64 os_page_mask = 4096 - 1;
+NvU8 os_page_shift = 12;
+
 NV_STATUS os_get_page(NvU64 address) {
     return NV_ERR_NOT_SUPPORTED;
 }
@@ -213,5 +220,56 @@ NV_STATUS os_get_version_info(os_version_info* pOsVersionInfo) {
     //    pOsVersionInfo->os_build_date_plus_str
 
     return status;
+}
+
+void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
+    // Our start is actually our memoryIndex.
+    uint8_t memoryIndex = (uint8_t)start;
+
+    nvd_log("got memory index %hhu, size %llu, mode %d", memoryIndex,
+            size_bytes, mode);
+    IOPCIDevice* device = (IOPCIDevice*)nvd_state->device;
+
+    IOMemoryDescriptor* returnMemory = NULL;
+    kern_return_t result = device->_CopyDeviceMemoryWithIndex(
+        memoryIndex, &returnMemory, ((IOService*)nvd_state->service));
+    if (result != KERN_SUCCESS) {
+        nvd_log("Failed to map memory: %d", result);
+        // TODO: This should be fatal
+        return NULL;
+    }
+
+    // Determine what option to use.
+    uint64_t mappingOptions = 0;
+    switch (mode) {
+    case NV_MEMORY_CACHED:
+        mappingOptions = kIOMemoryMapCacheModeDefault;
+        break;
+    case NV_MEMORY_WRITECOMBINED:
+        // TODO: No idea how to support this yet
+    case NV_MEMORY_UNCACHED:
+    case NV_MEMORY_DEFAULT:
+        mappingOptions = kIOMemoryMapCacheModeInhibit;
+        break;
+    default:
+        nv_printf(NV_DBG_ERRORS,
+                  "NVRM: os_map_kernel_space: unsupported mode!\n");
+        OSSafeReleaseNULL(returnMemory);
+        return NULL;
+    }
+
+    // Map this range into our space.
+    IOMemoryMap* mapping = NULL;
+    result = returnMemory->CreateMapping(mappingOptions, NULL, 0, size_bytes, 0,
+                                         &mapping);
+    if (result != KERN_SUCCESS) {
+        nvd_log("Failed to create memory mapping: %d", result);
+        return NULL;
+    }
+
+    // TODO(spotlightishere): Keep track of these mappings lol
+    void* memory = (void*)mapping->GetAddress();
+
+    return memory;
 }
 }

@@ -33,9 +33,13 @@ extern "C" {
 
 typedef struct nv_darwin_state_s {
     nv_state_t nv_state;
+    // Actually a PCIHorrorKit.
+    void* service;
     // Actually an IOPCIDevice.
     void* device;
 }* nv_darwin_state_t;
+
+extern nv_darwin_state_t nvd_state;
 
 /// Helper macro to allow accessing the global `nv_state_t`
 /// within our global `nv_darwin_state_t.`

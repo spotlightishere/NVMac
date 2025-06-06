@@ -22,7 +22,7 @@ struct nv_cap {
 
 nv_cap_t* os_nv_cap_create_file_entry(nv_cap_t* parent_cap, const char* name,
                                       int mode) {
-    nvd_log("Creating file cap %s with mode %d", name, mode);
+    nvd_log("Briging cap (mode %d) to IOKit property %s", mode, name);
 
     nv_cap_t* entry = (nv_cap_t*)IOMalloc(sizeof(nv_cap));
     entry->dummy = OSDictionary::withCapacity(1);
@@ -31,7 +31,7 @@ nv_cap_t* os_nv_cap_create_file_entry(nv_cap_t* parent_cap, const char* name,
 
 nv_cap_t* os_nv_cap_create_dir_entry(nv_cap_t* parent_cap, const char* name,
                                      int mode) {
-    nvd_log("Creating dir cap %s with mode %d", name, mode);
+    nvd_log("Briging cap (mode %d) to IOKit property %s", mode, name);
 
     nv_cap_t* entry = (nv_cap_t*)IOMalloc(sizeof(nv_cap));
     entry->dummy = OSDictionary::withCapacity(1);

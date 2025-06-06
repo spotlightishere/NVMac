@@ -28,7 +28,9 @@ NV_STATUS os_alloc_mem(void** address, NvU64 size) {
 
 void os_free_mem(void* ptr) {
     if (global_allocations.contains(ptr) == false) {
-        panic("Allocation was freed for pointer that does not exist!");
+        nvd_log(
+            "TEMP panic Allocation was freed for pointer that does not exist!");
+        return;
     }
 
     uint64_t allocation_size = global_allocations[ptr];
