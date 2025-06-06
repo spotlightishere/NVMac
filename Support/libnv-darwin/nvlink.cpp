@@ -48,4 +48,16 @@ void nvlink_sleep(unsigned int ms) {
 NvLength nvlink_strlen(const char* s) {
     return strlen(s);
 }
+
+NvBool os_imex_channel_is_supported = NV_FALSE;
+
+NvS32 os_imex_channel_count(void) {
+    // We do not handle IMEX channels.
+    return 0;
+}
+
+NvS32 os_imex_channel_get(void) {
+    // -1 is used when unsupported on Linux.
+    return -1;
+}
 }

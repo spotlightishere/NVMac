@@ -81,28 +81,4 @@ NvS32 os_snprintf(char* str, NvU32 size, const char* fmt, ...) {
 NvU32 os_strtoul(const char* str, char** endptr, NvU32 base) {
     return (NvU32)strtoul(str, endptr, base);
 }
-
-#pragma mark - Standard Out
-void out_string(const char* str) {
-    nvd_log("%s", str);
-}
-
-int nv_printf(NvU32 debuglevel, const char* printf_format, ...) {
-    // TODO(spotlightishere): Respect debug level
-    va_list args;
-    va_start(args, printf_format);
-
-    char* message;
-    int length = vasprintf(&message, printf_format, args);
-
-    nvd_log("[Level %d] %s", debuglevel, message);
-    va_end(args);
-    IOFree(message, length);
-
-    return 0;
-}
-
-void os_bug_check(NvU32 bugCode, const char* bugCodeStr) {
-    panic("%s", bugCodeStr);
-}
 }

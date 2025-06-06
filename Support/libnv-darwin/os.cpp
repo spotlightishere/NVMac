@@ -11,6 +11,9 @@
 #include <time.h>
 
 extern "C" {
+// NVIDIA has their own function called `os_log_error`.
+// Undefine the Apple-provided macro before importing.
+#undef os_log_error
 #include "os-interface.h"
 
 #pragma mark - Support checks
@@ -68,12 +71,24 @@ void os_enable_console_access(void) {
     // Stubbed
 }
 
-#pragma mark - Time
-
-// TODO(spotlightishere): Implement; threadId should be pid
-NV_STATUS os_get_current_thread(NvU64* threadId) {
+NV_STATUS os_device_vm_present(void) {
     return NV_ERR_NOT_SUPPORTED;
 }
+
+NvBool os_is_nvswitch_present(void) {
+    // TODO: Implement if desired
+    return NV_FALSE;
+}
+
+NvBool os_is_vgx_hyper(void) {
+    return NV_FALSE;
+}
+
+NV_STATUS os_inject_vgx_msi(NvU16 guestID, NvU64 msiAddr, NvU32 msiData) {
+    return NV_ERR_NOT_SUPPORTED;
+}
+
+#pragma mark - Time
 
 NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {
     uint64_t nanoseconds = clock_gettime_nsec_np(CLOCK_REALTIME);
@@ -84,11 +99,11 @@ NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {
 }
 
 NvU64 os_get_current_tick_hr(void) {
-    return 0;
+    return clock_gettime_nsec_np(CLOCK_UPTIME_RAW);
 }
 
 NvU64 os_get_current_tick(void) {
-    return 0;
+    return clock_gettime_nsec_np(CLOCK_UPTIME_RAW);
 }
 
 NV_STATUS os_delay_us(NvU32 MicroSeconds) {
@@ -102,6 +117,11 @@ NV_STATUS os_delay(NvU32 MilliSeconds) {
 }
 
 #pragma mark - Process Info
+
+// TODO(spotlightishere): Implement; threadId should be pid
+NV_STATUS os_get_current_thread(NvU64* threadId) {
+    return NV_ERR_NOT_SUPPORTED;
+}
 
 NV_STATUS os_get_euid(NvU32* pSecToken) {
     return NV_ERR_NOT_SUPPORTED;
@@ -125,6 +145,21 @@ void os_get_current_process_name(char* buf, NvU32 len) {
 void* os_get_pid_info(void) {
     // TODO(spotlightishere): Implement
     return NULL;
+}
+
+NvBool os_is_init_ns(void) {
+    // Namespaces on XNU? Not quite.
+    return NV_TRUE;
+}
+
+NvBool os_is_administrator(void) {
+    // TODO: Actually implement
+    return NV_TRUE;
+}
+
+NvBool os_check_access(RsAccessRight accessRight) {
+    // TODO: Actually Implement
+    return NV_TRUE;
 }
 
 #pragma mark - Memory

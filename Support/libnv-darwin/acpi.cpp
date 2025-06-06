@@ -6,8 +6,6 @@
 //
 
 #include "nv_darwin.h"
-#include <cstdlib>
-#include <string>
 
 extern "C" {
 
