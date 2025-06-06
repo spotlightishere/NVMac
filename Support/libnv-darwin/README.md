@@ -2,4 +2,4 @@
 This is the implementation of OS-specific functionality necessary for `libnv-kernel`.
 
 ## Things to fix
-- There is no proper `free` for NVLink.
+- Memory tracking - can we be certain this works?

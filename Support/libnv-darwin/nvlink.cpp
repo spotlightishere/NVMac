@@ -14,21 +14,18 @@
 
 extern "C" {
 
+// Defined within `libc.cpp`.
+NV_STATUS os_alloc_mem(void** address, NvU64 size);
+void os_free_mem(void* address);
+
 void* nvlink_malloc(NvLength size) {
-    return IOMalloc(size);
+    void* ptr;
+    os_alloc_mem(&ptr, size);
+    return ptr;
 }
 
 void nvlink_free(void* ptr) {
-    // TODO(spotlightishere): Implement
-    // We need to use IOFree.
-    // It requires the length of the deallocation,
-    // so we would need to keep track of allocations
-    // performed by NVLink.
-    //
-    // For now, we'll put a size of zero.
-    // (This should panic.)
-    IOFree(ptr, 0);
-    return;
+    os_free_mem(ptr);
 }
 
 void nvlink_assert(int expression) {

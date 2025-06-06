@@ -13,6 +13,10 @@ extern "C" {
 
 // Let's avoid ACPI for now.
 
+NV_STATUS os_get_acpi_rsdp_from_uefi(NvU32* pRsdpAddr) {
+    return NV_ERR_NOT_SUPPORTED;
+}
+
 NV_STATUS nv_acpi_d3cold_dsm_for_upstream_port(nv_state_t* nv,
                                                NvU8* pAcpiDsmGuid,
                                                NvU32 acpiDsmRev,
