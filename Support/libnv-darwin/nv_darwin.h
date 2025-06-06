@@ -11,6 +11,9 @@
 // Import the correct IOKit headers for this target.
 #if TARGET_OS_DRIVERKIT
 #include <DriverKit/IOLib.h>
+
+#include "driverkit_shim.h"
+
 #else
 #include <IOKit/IOLib.h>
 #endif

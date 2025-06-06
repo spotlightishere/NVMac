@@ -22,7 +22,7 @@ NV_STATUS os_alloc_mem(void** address, NvU64 size) {
     if (ptr == NULL) {
         return NV_ERR_NO_MEMORY;
     }
-
+    
     global_allocations[ptr] = size;
     *address = ptr;
     return NV_OK;
@@ -32,10 +32,10 @@ void os_free_mem(void* ptr) {
     if (global_allocations.contains(ptr) == false) {
         panic("Allocation was freed for pointer that does not exist!");
     }
-
+    
     uint64_t allocation_size = global_allocations[ptr];
     IOFree(ptr, allocation_size);
-
+    
     global_allocations.erase(ptr);
 }
 
@@ -49,8 +49,19 @@ void* os_mem_copy(void* dst, const void* src, NvU32 length) {
     return memcpy(dst, src, length);
 }
 
+// TODO(spotlightishere): the compiler is optimizing
+// all calls to `memset` to this function for some reason,
+// and I am struggling to diagnose why.
+//
+// Instead, please take this manual version.
 void* os_mem_set(void* dst, NvU8 c, NvU32 length) {
-    return memset(dst, c, length);
+    char* tmp = (char*)dst;
+    
+    for (int i = 0; i < length; i++) {
+        tmp[i] = c;
+    }
+    
+    return dst;
 }
 
 char* os_string_copy(char* dst, const char* src) {
@@ -73,11 +84,33 @@ NvS32 os_snprintf(char* str, NvU32 size, const char* fmt, ...) {
     va_start(args, fmt);
     NvS32 result = snprintf(str, size, fmt, args);
     va_end(args);
-
+    
     return result;
 }
 
 NvU32 os_strtoul(const char* str, char** endptr, NvU32 base) {
     return (NvU32)strtoul(str, endptr, base);
+}
+
+#pragma mark - Locks, mutexes
+
+NV_STATUS os_alloc_spinlock(void** ppSpinlock) {
+    void* spinlock = IOMallocZero(sizeof(os_unfair_lock_s));
+    *ppSpinlock = spinlock;
+    return NV_OK;
+}
+
+void os_free_spinlock(void* pSpinlock) {
+    IOFree(pSpinlock, sizeof(os_unfair_lock_s));
+}
+
+// Return value are flags that we do not respect.
+NvU64 os_acquire_spinlock(void* pSpinlock) {
+    os_unfair_lock_lock((os_unfair_lock_t)pSpinlock);
+    return 0;
+}
+
+void os_release_spinlock(void* pSpinlock, NvU64 oldIrql) {
+    os_unfair_lock_unlock((os_unfair_lock_t)pSpinlock);
 }
 }

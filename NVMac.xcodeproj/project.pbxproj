@@ -12,6 +12,7 @@
 		4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */; };
 		425D7EC02DF305BE0076989D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425D7EBF2DF305BD0076989D /* IOKit.framework */; };
+		425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 425D7EC42DF30C530076989D /* libsystem_platform.tbd */; };
 		4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80B2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a */; };
 		4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80D2DF1451600544179 /* nv-kernel-macosx.a */; };
 /* End PBXBuildFile section */
@@ -47,6 +48,7 @@
 		4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = space.joscomputing.PCIHorror.PCIHorrorKit.dext; sourceTree = BUILT_PRODUCTS_DIR; };
 		4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCIDriverKit.framework; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/System/Library/Frameworks/PCIDriverKit.framework; sourceTree = DEVELOPER_DIR; };
 		425D7EBF2DF305BD0076989D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		425D7EC42DF30C530076989D /* libsystem_platform.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_platform.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_platform.tbd; sourceTree = DEVELOPER_DIR; };
 		4261A7E22DF13CA200544179 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "libnv-kernel.xcconfig"; sourceTree = "<group>"; };
 		4261A80B2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "../Debug-driverkit/nv-kernel-driverkit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +83,7 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
+				driverkit_shim.h,
 				libc.cpp,
 				nv_darwin.h,
 				nvlink.cpp,
@@ -97,6 +100,7 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
+				driverkit_shim.h,
 				libc.cpp,
 				nv_darwin.h,
 				nvlink.cpp,
@@ -234,6 +238,7 @@
 			files = (
 				4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */,
 				4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */,
+				425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */,
 				4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +282,7 @@
 		426B441E2DEE64510091BF48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				425D7EC42DF30C530076989D /* libsystem_platform.tbd */,
 				425D7EBF2DF305BD0076989D /* IOKit.framework */,
 				4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */,
 				426B441F2DEE64510091BF48 /* libkmod.a */,
@@ -621,6 +627,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PCIHorrorKit/Info.plist;
 				INFOPLIST_KEY_OSBundleUsageDescription = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/DriverKit/usr/lib/system",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror.PCIHorrorKit;
 				PRODUCT_NAME = "$(inherited)";
@@ -651,6 +661,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PCIHorrorKit/Info.plist;
 				INFOPLIST_KEY_OSBundleUsageDescription = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/DriverKit/usr/lib/system",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror.PCIHorrorKit;
 				PRODUCT_NAME = "$(inherited)";

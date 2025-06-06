@@ -87,6 +87,11 @@ NV_STATUS os_inject_vgx_msi(NvU16 guestID, NvU64 msiAddr, NvU32 msiData) {
     return NV_ERR_NOT_SUPPORTED;
 }
 
+// TODO: This should probably be supported some day.
+NvBool nv_is_chassis_notebook(void) {
+    return NV_FALSE;
+}
+
 #pragma mark - Time
 
 NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {
