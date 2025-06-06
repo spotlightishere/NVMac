@@ -8,6 +8,13 @@
 #ifndef nv_darwin_h
 #define nv_darwin_h
 
+// Import the correct IOKit headers for this target.
+#if TARGET_OS_DRIVERKIT
+#include <DriverKit/IOLib.h>
+#else
+#include <IOKit/IOLib.h>
+#endif
+
 #include <os/log.h>
 
 #ifdef __cplusplus
