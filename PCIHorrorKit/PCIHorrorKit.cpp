@@ -51,6 +51,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         return ret;
     }
     nvd_state->service = (void*)this;
+    RegisterService();
 
     // We will never have a seperate stack.
     nvidia_stack_t* sp = NULL;
@@ -139,28 +140,48 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         potentialDevice->GetBARInfo(currentBAR, &memoryIndex, &barSize,
                                     &barType);
 
+        // We only have 3 possible BAR indexes.
+        uint64_t barAddressOffset = 0;
+        switch (currentBAR) {
+        case 0:
+            barAddressOffset = kIOPCIConfigurationOffsetBaseAddress0;
+            break;
+        case 1:
+            barAddressOffset = kIOPCIConfigurationOffsetBaseAddress1;
+            break;
+        case 2:
+            barAddressOffset = kIOPCIConfigurationOffsetBaseAddress2;
+            break;
+        default:
+            nvd_log("Unknown BAR! Defaulting to 0.");
+            barAddressOffset = kIOPCIConfigurationOffsetBaseAddress0;
+            break;
+        }
+
+        uint32_t barAddress = 0;
+        potentialDevice->ConfigurationRead32(barAddressOffset, &barAddress);
+
         nv->bars[j].offset = NVRM_PCICFG_BAR_OFFSET(currentBAR);
         // We'll (mis)use this to instead store memoryIndex.
-        nv->bars[j].cpu_address = memoryIndex;
+        // However, this is zero-indexed, and zero can be mistaken as null.
+        nv->bars[j].cpu_address = barAddress + memoryIndex;
         nv->bars[j].size = barSize;
 
-        nvd_log("inserting bar %d with memoryIndex %d and size %llu",
-                currentBAR, memoryIndex, barSize);
+        nvd_log("inserting bar %d @ %u with memoryIndex %d and size %llu",
+                currentBAR, barAddress, memoryIndex, barSize);
         j++;
     }
     nv->regs = &nv->bars[NV_GPU_BAR_INDEX_REGS];
     nv->fb = &nv->bars[NV_GPU_BAR_INDEX_FB];
 
-    RegisterService();
-
-    rm_init_private_state(sp, nv);
+    rm_init_private_state(sp, NV_STATE_PTR);
     rm_set_rm_firmware_requested(sp, nv);
     rm_notify_gpu_addition(sp, nv);
 
-//    NV_STATUS status = rm_init_adapter(sp, nv);
-//    if (status != NV_OK) {
-//        nvd_log("got an error while initializing: %d", status);
-//    }
+    // NV_STATUS status = rm_init_adapter(sp, nv);
+    // if (status != NV_OK) {
+    //     nvd_log("got an error while initializing: %d", status);
+    // }
 
     char* result = rm_get_gpu_uuid(sp, nv);
     nvd_log("ooh: %s", result);

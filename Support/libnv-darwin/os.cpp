@@ -186,7 +186,7 @@ NvBool os_is_isr(void) {
 
 // TODO(spotlightishere): This is hardcoded
 NvU32 os_page_size = 4096;
-NvU64 os_page_mask = 4096 - 1;
+NvU64 os_page_mask = os_page_size - 1;
 NvU8 os_page_shift = 12;
 
 NV_STATUS os_get_page(NvU64 address) {
@@ -233,8 +233,8 @@ NV_STATUS os_get_version_info(os_version_info* pOsVersionInfo) {
 }
 
 void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
-    // Our start is actually our memoryIndex.
-    uint8_t memoryIndex = (uint8_t)start;
+    // Our start contains our memoryIndex.
+    uint8_t memoryIndex = (uint8_t)start & 0xFF;
 
     nvd_log("got memory index %hhu, size %llu, mode %d", memoryIndex,
             size_bytes, mode);
