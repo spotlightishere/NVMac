@@ -31,6 +31,16 @@ int nv_printf(NvU32 debuglevel, const char* printf_format, ...) {
     return 0;
 }
 
+NV_STATUS nv_log_error(nv_state_t* nv, NvU32 error_number, const char* format,
+                       va_list ap) {
+    char* message;
+    int length = vasprintf(&message, format, ap);
+
+    nvd_log("[ERROR CODE %d] %s", error_number, message);
+    IOFree(message, length);
+    return NV_OK;
+}
+
 void os_bug_check(NvU32 bugCode, const char* bugCodeStr) {
     nvd_log("panic: %s", bugCodeStr);
 }

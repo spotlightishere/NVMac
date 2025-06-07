@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4253FC9B2DEE941D006EC86E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4253FC9A2DEE941D006EC86E /* README.md */; };
 		4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4239C81E2DEEE9A2008481B4 /* DriverKit.framework */; };
 		4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */; };
@@ -194,6 +193,20 @@
 			);
 			target = 426B44032DEE5C770091BF48 /* NVMacRM */;
 		};
+		42C4F39A2DF507C3001573D0 /* Exceptions for "nvidia-binary-driver" folder in "PCIHorrorKit" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				README,
+			);
+			target = 4254DC452DEFFA2F00871F6B /* PCIHorrorKit */;
+		};
+		42C4F39D2DF507E3001573D0 /* Exceptions for "nvidia-binary-driver" folder in "NVMacRM" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				README,
+			);
+			target = 426B44032DEE5C770091BF48 /* NVMacRM */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -236,6 +249,18 @@
 				426B440C2DEE5C770091BF48 /* Exceptions for "NVMacRM" folder in "NVMacRM" target */,
 			);
 			path = NVMacRM;
+			sourceTree = "<group>";
+		};
+		42C4F3922DF5077B001573D0 /* nvidia-binary-driver */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				42C4F39D2DF507E3001573D0 /* Exceptions for "nvidia-binary-driver" folder in "NVMacRM" target */,
+				42C4F39A2DF507C3001573D0 /* Exceptions for "nvidia-binary-driver" folder in "PCIHorrorKit" target */,
+			);
+			explicitFolders = (
+				firmware,
+			);
+			path = "nvidia-binary-driver";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -331,6 +356,7 @@
 				4206B4052DF15DDA0052D241 /* libnv-darwin */,
 				42F97F3B2DEE9DF800BBD8A7 /* libnv-kernel */,
 				4254DC362DEFFA2000871F6B /* PCIHorror */,
+				42C4F3922DF5077B001573D0 /* nvidia-binary-driver */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -431,6 +457,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				4254DC482DEFFA2F00871F6B /* PCIHorrorKit */,
+				42C4F3922DF5077B001573D0 /* nvidia-binary-driver */,
 			);
 			name = PCIHorrorKit;
 			packageProductDependencies = (
@@ -454,6 +481,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				426B44062DEE5C770091BF48 /* NVMacRM */,
+				42C4F3922DF5077B001573D0 /* nvidia-binary-driver */,
 			);
 			name = NVMacRM;
 			packageProductDependencies = (
@@ -529,7 +557,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4253FC9B2DEE941D006EC86E /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

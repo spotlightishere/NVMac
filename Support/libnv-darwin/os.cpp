@@ -62,6 +62,10 @@ NvBool nv_requires_dma_remap(nv_state_t* nv) {
     return NV_FALSE;
 }
 
+nv_state_t* nv_get_ctl_state(void) {
+    return NV_STATE_PTR;
+}
+
 NvU32 os_get_cpu_number(void) {
     // TODO(spotlightishere): Implement, if necessary
     return 1;

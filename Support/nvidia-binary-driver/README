@@ -1,0 +1,4 @@
+# nvidia-binary-driver
+Please obtain the `firmware` directory from the NVIDIA binary driver, and place them within this directory.
+
+As of writing, the directory only contains two files: `gsp_ga10x.bin`, and `gsp_tu10x.bin`.
