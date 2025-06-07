@@ -111,6 +111,12 @@ NvBool nv_is_chassis_notebook(void) {
     return NV_FALSE;
 }
 
+void nv_set_dma_address_size(nv_state_t* nv, NvU32 phys_addr_bits) {
+    // TODO(spotlightishere): We should support DMA
+    nvd_log("Stubbed: nv_set_dma_address_size");
+    return;
+}
+
 #pragma mark - Time
 
 NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {

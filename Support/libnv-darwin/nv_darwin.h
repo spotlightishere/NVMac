@@ -27,7 +27,7 @@ extern "C" {
 // Before we import, allow NVIDIA headers to give us a firmware path.
 // This will be loaded via the KEXT/DEXT's resources.
 #include <nvUnixVersion.h>
-#define NV_FIRMWARE_FOR_NAME(name)  "firmware/" NV_VERSION_STRING "/" name ".bin"
+#define NV_FIRMWARE_FOR_NAME(name) "firmware/" NV_VERSION_STRING "/" name ".bin"
 
 // libnv-kernel uses C linkage.
 #include <nv.h>
