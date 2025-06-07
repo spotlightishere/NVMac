@@ -50,7 +50,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         nvd_log("Error while starting service (return code %d)", ret);
         return ret;
     }
-    nvd_state->service = (void*)provider;
+    nvd_state->service = (void*)this;
 
     // We will never have a seperate stack.
     nvidia_stack_t* sp = NULL;
@@ -75,6 +75,12 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         nvd_log("Error while opening PCI device (return code %d)", ret);
         return kIOReturnNoDevice;
     }
+    uint16_t commandRegister;
+    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetCommand,
+                                         &commandRegister);
+    commandRegister |= (kIOPCICommandBusMaster | kIOPCICommandMemorySpace);
+    potentialDevice->ConfigurationWrite16(kIOPCIConfigurationOffsetCommand,
+                                          commandRegister);
 
     // Look for a compatible BAR to interact with the GPU.
     for (uint8_t currentBAR = 0; currentBAR < NV_GPU_NUM_BARS; currentBAR++) {
@@ -103,15 +109,19 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     nv_state_t* nv = NV_STATE_PTR;
 
     // We'll use the `NV_GLOBAL_DEVICE` macro to access this going forward.
-    //    nvd_state->device = (void*)potentialDevice;
-    //    NV_GLOBAL_DEVICE->retain();
+    nvd_state->device = (void*)potentialDevice;
+    NV_GLOBAL_DEVICE->retain();
 
     // TODO(spotlightishere): Do we really need to do this?
     // We already specify PCI matches within our kext/dext info...
-    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetVendorID, &nv->pci_info.vendor_id);
-    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetDeviceID, &nv->pci_info.vendor_id);
-    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetSubSystemID, &nv->subsystem_id);
-    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetSubSystemVendorID, &nv->subsystem_vendor);
+    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetVendorID,
+                                         &nv->pci_info.vendor_id);
+    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetDeviceID,
+                                         &nv->pci_info.device_id);
+    potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetSubSystemID,
+                                         &nv->subsystem_id);
+    potentialDevice->ConfigurationRead16(
+        kIOPCIConfigurationOffsetSubSystemVendorID, &nv->subsystem_vendor);
     nv->os_state = (void*)nvd_state;
     // TODO(spotlightishere): Implement
     nv->pci_info.domain = 0;
@@ -119,7 +129,6 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     nv->pci_info.slot = 0;
     nv->flags = 0;
     nv->handle = NV_GLOBAL_DEVICE;
-    //    rm_notify_gpu_addition(sp, nv);
 
     for (int currentBAR = 0, j = 0;
          currentBAR < NVRM_PCICFG_NUM_BARS && j < NV_GPU_NUM_BARS;
@@ -143,13 +152,15 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     nv->fb = &nv->bars[NV_GPU_BAR_INDEX_FB];
 
     RegisterService();
-    
-    rm_init_private_state(sp, nv);
 
-    //    NV_STATUS status = rm_init_adapter(sp, nv);
-    //    if (status != NV_OK) {
-    //        nvd_log("got an error while initializing: %d", status);
-    //    }
+    rm_init_private_state(sp, nv);
+    rm_set_rm_firmware_requested(sp, nv);
+    rm_notify_gpu_addition(sp, nv);
+
+//    NV_STATUS status = rm_init_adapter(sp, nv);
+//    if (status != NV_OK) {
+//        nvd_log("got an error while initializing: %d", status);
+//    }
 
     char* result = rm_get_gpu_uuid(sp, nv);
     nvd_log("ooh: %s", result);

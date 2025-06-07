@@ -9,7 +9,11 @@
 #include <DriverKit/IOMemoryMap.h>
 #include <PCIDriverKit/PCIDriverKit.h>
 #include <cstdlib>
+#include <map>
 #include <time.h>
+
+// TODO(spotlightishere): There's also no way this will scale
+std::map<void*, IOMemoryMap*> kernel_space_map{};
 
 extern "C" {
 // NVIDIA has their own function called `os_log_error`.
@@ -44,6 +48,12 @@ NvBool os_is_efi_enabled(void) {
 }
 
 #pragma mark - Hardware
+
+NvBool os_dma_buf_enabled = NV_FALSE;
+
+NvBool nv_requires_dma_remap(nv_state_t* nv) {
+    return NV_FALSE;
+}
 
 NvU32 os_get_cpu_number(void) {
     // TODO(spotlightishere): Implement, if necessary
@@ -260,16 +270,36 @@ void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
 
     // Map this range into our space.
     IOMemoryMap* mapping = NULL;
-    result = returnMemory->CreateMapping(mappingOptions, NULL, 0, size_bytes, 0,
+    result = returnMemory->CreateMapping(mappingOptions, 0, 0, size_bytes, 0,
                                          &mapping);
     if (result != KERN_SUCCESS) {
         nvd_log("Failed to create memory mapping: %d", result);
+        OSSafeReleaseNULL(returnMemory);
         return NULL;
     }
 
     // TODO(spotlightishere): Keep track of these mappings lol
-    void* memory = (void*)mapping->GetAddress();
+    void* addressBase = (void*)mapping->GetAddress();
+    kernel_space_map[addressBase] = mapping;
+    nvd_log("mapping at %p for size %llu", addressBase, size_bytes);
+    OSSafeReleaseNULL(returnMemory);
 
-    return memory;
+    return addressBase;
+}
+
+void os_unmap_kernel_space(void* addressBase, NvU64 size_bytes) {
+    // No need to leverage byte size - we already have an IOMemoryMap
+    // that will handle unmapping on our behalf.
+    if (kernel_space_map.contains(addressBase) == false) {
+        nvd_log(
+            "TEMP panic Memory was unmapped for pointer that does not exist!");
+        return;
+    }
+
+    nvd_log("unmapping %p", addressBase);
+
+    IOMemoryMap* mapping = kernel_space_map[addressBase];
+    OSSafeReleaseNULL(mapping);
+    kernel_space_map.erase(addressBase);
 }
 }
