@@ -51,6 +51,13 @@ NvBool os_is_efi_enabled(void) {
 
 NvBool os_dma_buf_enabled = NV_FALSE;
 
+// We do not support confidental compute.
+NvBool os_cc_enabled = 0;
+NvBool os_cc_sev_snp_enabled = 0;
+NvBool os_cc_snp_vtom_enabled = 0;
+NvBool os_cc_tdx_enabled = 0;
+NvBool os_cc_sme_enabled = 0;
+
 NvBool nv_requires_dma_remap(nv_state_t* nv) {
     return NV_FALSE;
 }
@@ -186,8 +193,13 @@ NvBool os_is_isr(void) {
 
 // TODO(spotlightishere): This is hardcoded
 NvU32 os_page_size = 4096;
-NvU64 os_page_mask = os_page_size - 1;
+NvU64 os_page_mask = ~(os_page_size - 1);
 NvU8 os_page_shift = 12;
+
+NvU32 nv_get_dev_minor(nv_state_t* nv) {
+    // TODO(spotlightishere): Figure this out
+    return 0;
+}
 
 NV_STATUS os_get_page(NvU64 address) {
     return NV_ERR_NOT_SUPPORTED;
@@ -236,8 +248,8 @@ void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
     // Our start contains our memoryIndex.
     uint8_t memoryIndex = (uint8_t)start & 0xFF;
 
-    nvd_log("got memory index %hhu, size %llu, mode %d", memoryIndex,
-            size_bytes, mode);
+    nvd_log("[DEBUG] Mapping at memory index %hhu with size %llu", memoryIndex,
+            size_bytes);
     IOPCIDevice* device = (IOPCIDevice*)nvd_state->device;
 
     IOMemoryDescriptor* returnMemory = NULL;
@@ -281,7 +293,7 @@ void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
     // TODO(spotlightishere): Keep track of these mappings lol
     void* addressBase = (void*)mapping->GetAddress();
     kernel_space_map[addressBase] = mapping;
-    nvd_log("mapping at %p for size %llu", addressBase, size_bytes);
+    nvd_log("[DEBUG] mapping at %p for size %llu", addressBase, size_bytes);
     OSSafeReleaseNULL(returnMemory);
 
     return addressBase;
