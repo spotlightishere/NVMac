@@ -52,6 +52,8 @@ typedef struct nv_darwin_state_s {
     void* service;
     // Actually an IOPCIDevice.
     void* device;
+    // The mask applied to DMA addresses.
+    uint64_t dma_mask;
 }* nv_darwin_state_t;
 
 extern nv_darwin_state_t nvd_state;
@@ -66,6 +68,10 @@ extern nv_darwin_state_t nvd_state;
 /// As such, it requires that you have imported the appropriate
 /// type for using `IOPCIDevice`, via `PCIDriverKit` or `IOKit` itself.
 #define NV_GLOBAL_DEVICE ((IOPCIDevice*)nvd_state->device)
+
+/// Darwin-specific implementation of `nv_dma_device`.
+/// (We currently do not use it - instead, prefer `NV_GLOBAL_DEVICE`.)
+struct nv_dma_device {};
 
 /// Helper macro to allow logging via the default `os_log`.
 #define nvd_log(fmt, ...) os_log(OS_LOG_DEFAULT, (fmt), ##__VA_ARGS__)

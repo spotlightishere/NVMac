@@ -21,6 +21,10 @@ void* os_pci_init_handle(NvU32 domain, NvU8 bus, NvU8 slot, NvU8 function,
     //
     // This should be rearchitectured to handle multiple GPUs
     // if such is desired in the future.
+    NV_GLOBAL_DEVICE->ConfigurationRead16(kIOPCIConfigurationOffsetVendorID,
+                                          vendor);
+    NV_GLOBAL_DEVICE->ConfigurationRead16(kIOPCIConfigurationOffsetDeviceID,
+                                          device);
     return (void*)NV_GLOBAL_DEVICE;
 }
 

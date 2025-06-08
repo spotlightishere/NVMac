@@ -44,21 +44,30 @@ NvBool os_is_efi_enabled(void) {
 
 #pragma mark - Hardware
 
-NvBool os_dma_buf_enabled = NV_FALSE;
-
 // We do not support confidental compute.
-NvBool os_cc_enabled = 0;
-NvBool os_cc_sev_snp_enabled = 0;
-NvBool os_cc_snp_vtom_enabled = 0;
-NvBool os_cc_tdx_enabled = 0;
-NvBool os_cc_sme_enabled = 0;
+NvBool os_cc_enabled = NV_FALSE;
+NvBool os_cc_sev_snp_enabled = NV_FALSE;
+NvBool os_cc_snp_vtom_enabled = NV_FALSE;
+NvBool os_cc_tdx_enabled = NV_FALSE;
+NvBool os_cc_sme_enabled = NV_FALSE;
 
-NvBool nv_requires_dma_remap(nv_state_t* nv) {
-    return NV_FALSE;
+void nv_get_disp_smmu_stream_ids(nv_state_t* nv, NvU32* dispIsoStreamId,
+                                 NvU32* dispNisoStreamId) {
+    // Per FreeBSD source, this indicates we do not support SMMU.
+    *dispIsoStreamId = NV_U32_MAX;
+    *dispNisoStreamId = NV_U32_MAX;
+}
+
+NV_STATUS nv_set_primary_vga_status(nv_state_t* nv) {
+    return NV_ERR_NOT_SUPPORTED;
 }
 
 nv_state_t* nv_get_ctl_state(void) {
     return NV_STATE_PTR;
+}
+
+NvBool nv_is_gpu_accessible(nv_state_t* nv) {
+    return NV_TRUE;
 }
 
 NvU32 os_get_cpu_number(void) {
@@ -110,19 +119,17 @@ NvBool nv_is_chassis_notebook(void) {
     return NV_FALSE;
 }
 
-void nv_set_dma_address_size(nv_state_t* nv, NvU32 phys_addr_bits) {
-    // TODO(spotlightishere): We should support DMA
-    nvd_log("Stubbed: nv_set_dma_address_size");
-    return;
-}
-
 #pragma mark - Time
+
+#define NSEC_PER_USEC 1000ull
+#define NSEC_PER_SEC 1000000000ull
 
 NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {
     uint64_t nanoseconds = clock_gettime_nsec_np(CLOCK_REALTIME);
-    NvU32 microseconds = (NvU32)nanoseconds / 1000;
-    *useconds = microseconds;
-    *seconds = microseconds / 1000000;
+    uint64_t currentMicroseconds = nanoseconds / NSEC_PER_USEC;
+    uint64_t currentSeconds = nanoseconds / NSEC_PER_SEC;
+    *useconds = (NvU32)currentMicroseconds;
+    *seconds = (NvU32)currentSeconds;
     return NV_OK;
 }
 
@@ -237,14 +244,6 @@ void os_delete_record_for_crashLog(void* pbuffer) {
 
 NvU32 nv_get_dev_minor(nv_state_t* nv) {
     // TODO(spotlightishere): Figure this out
-    return 0;
-}
-
-NV_STATUS os_get_page(NvU64 address) {
-    return NV_ERR_NOT_SUPPORTED;
-}
-
-NvU32 os_get_page_refcount(NvU64 address) {
     return 0;
 }
 

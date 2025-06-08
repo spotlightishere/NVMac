@@ -19,24 +19,6 @@
 /// Global state for the control device.
 nv_darwin_state_t nvd_state;
 
-/// Via DriverKit, functions such as `getFunctionNumber` are unavailable.
-/// We parse the `pcidebug` property on the actual IOPCIDevice,
-/// as its format is `domain:bus:slot`.
-/// https://github.com/apple-oss-distributions/IOPCIFamily/blob/c20e408a748150a8cce2937720ddaf54b6b082bb/IOPCIConfigurator.cpp#L723
-///
-/// This is a hack, and really not necessary.
-void PopulatePCIInfo(IOPCIDevice* device, nv_pci_info_t info) {
-    OSDictionary* properties = NULL;
-    device->CopyProperties(&properties);
-    OSObject* pcidebugProperty = properties->getObject("pcidebug");
-    OSString* pcidebug = OSRequiredCast(OSString, pcidebugProperty);
-    const char* rawString = pcidebug->getCStringNoCopy();
-
-    sscanf(rawString, "%u:%c:%c", &info.domain, &info.bus, &info.slot);
-
-    OSSafeReleaseNULL(properties);
-}
-
 bool PCIHorrorKit::init() {
     bool ret = super::init();
     if (!ret) {
@@ -141,10 +123,11 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     potentialDevice->ConfigurationRead16(
         kIOPCIConfigurationOffsetSubSystemVendorID, &nv->subsystem_vendor);
 
-    // XXX(spotlightishere): This is a hack, but I'm a perfectionist.
-    PopulatePCIInfo(potentialDevice, nv->pci_info);
+    nv_pci_info_t info = nv->pci_info;
+    potentialDevice->GetBusDeviceFunction(&info.bus, &info.slot, &info.function);
     nv->os_state = (void*)nvd_state;
     nv->flags = 0;
+    nv->dma_dev = {};
     nv->handle = NV_GLOBAL_DEVICE;
 
     for (int currentBAR = 0, j = 0;
@@ -178,12 +161,10 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         potentialDevice->ConfigurationRead32(barAddressOffset, &barAddress);
 
         nv->bars[j].offset = NVRM_PCICFG_BAR_OFFSET(currentBAR);
-        // We'll (mis)use this to instead store memoryIndex.
-        // However, this is zero-indexed, and zero can be mistaken as null.
-        nv->bars[j].cpu_address = barAddress + memoryIndex;
+        nv->bars[j].cpu_address = barAddress;
         nv->bars[j].size = barSize;
 
-        nvd_log("inserting bar %d @ %u with memoryIndex %d and size %llu",
+        nvd_log("inserting bar %x @ %08x with memoryIndex %d and size %llu",
                 currentBAR, barAddress, memoryIndex, barSize);
         j++;
     }
