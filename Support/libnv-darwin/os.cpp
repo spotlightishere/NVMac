@@ -6,14 +6,8 @@
 //
 
 #include "nv_darwin.h"
-#include <DriverKit/IOMemoryMap.h>
-#include <PCIDriverKit/PCIDriverKit.h>
 #include <cstdlib>
-#include <map>
 #include <time.h>
-
-// TODO(spotlightishere): There's also no way this will scale
-std::map<void*, IOMemoryMap*> kernel_space_map{};
 
 extern "C" {
 // NVIDIA has their own function called `os_log_error`.
@@ -199,12 +193,17 @@ NvBool os_is_isr(void) {
     return NV_FALSE;
 }
 
-#pragma mark - Memory
+// Stubbed under Linux.
+void os_add_record_for_crashLog(void* pbuffer, NvU32 size) {
+    return;
+}
 
-// TODO(spotlightishere): This is hardcoded
-NvU32 os_page_size = 4096;
-NvU64 os_page_mask = ~(os_page_size - 1);
-NvU8 os_page_shift = 12;
+// Stubbed under Linux.
+void os_delete_record_for_crashLog(void* pbuffer) {
+    return;
+}
+
+#pragma mark - Memory
 
 NvU32 nv_get_dev_minor(nv_state_t* nv) {
     // TODO(spotlightishere): Figure this out
@@ -254,74 +253,22 @@ NV_STATUS os_get_version_info(os_version_info* pOsVersionInfo) {
     return status;
 }
 
-void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
-    // Our start contains our memoryIndex.
-    uint8_t memoryIndex = (uint8_t)start & 0xFF;
-
-    nvd_log("[DEBUG] Mapping at memory index %hhu with size %llu", memoryIndex,
-            size_bytes);
-    IOPCIDevice* device = (IOPCIDevice*)nvd_state->device;
-
-    IOMemoryDescriptor* returnMemory = NULL;
-    kern_return_t result = device->_CopyDeviceMemoryWithIndex(
-        memoryIndex, &returnMemory, ((IOService*)nvd_state->service));
-    if (result != KERN_SUCCESS) {
-        nvd_log("Failed to map memory: %d", result);
-        // TODO: This should be fatal
-        return NULL;
-    }
-
-    // Determine what option to use.
-    uint64_t mappingOptions = 0;
-    switch (mode) {
-    case NV_MEMORY_CACHED:
-        mappingOptions = kIOMemoryMapCacheModeDefault;
-        break;
-    case NV_MEMORY_WRITECOMBINED:
-        // TODO: No idea how to support this yet
-    case NV_MEMORY_UNCACHED:
-    case NV_MEMORY_DEFAULT:
-        mappingOptions = kIOMemoryMapCacheModeInhibit;
-        break;
-    default:
-        nv_printf(NV_DBG_ERRORS,
-                  "NVRM: os_map_kernel_space: unsupported mode!\n");
-        OSSafeReleaseNULL(returnMemory);
-        return NULL;
-    }
-
-    // Map this range into our space.
-    IOMemoryMap* mapping = NULL;
-    result = returnMemory->CreateMapping(mappingOptions, 0, 0, size_bytes, 0,
-                                         &mapping);
-    if (result != KERN_SUCCESS) {
-        nvd_log("Failed to create memory mapping: %d", result);
-        OSSafeReleaseNULL(returnMemory);
-        return NULL;
-    }
-
-    // TODO(spotlightishere): Keep track of these mappings lol
-    void* addressBase = (void*)mapping->GetAddress();
-    kernel_space_map[addressBase] = mapping;
-    nvd_log("[DEBUG] mapping at %p for size %llu", addressBase, size_bytes);
-    OSSafeReleaseNULL(returnMemory);
-
-    return addressBase;
+NV_STATUS os_flush_cpu_cache_all(void) {
+    return NV_ERR_NOT_SUPPORTED;
 }
 
-void os_unmap_kernel_space(void* addressBase, NvU64 size_bytes) {
-    // No need to leverage byte size - we already have an IOMemoryMap
-    // that will handle unmapping on our behalf.
-    if (kernel_space_map.contains(addressBase) == false) {
-        nvd_log(
-            "TEMP panic Memory was unmapped for pointer that does not exist!");
-        return;
-    }
+NV_STATUS os_flush_user_cache(void) {
+    return NV_ERR_NOT_SUPPORTED;
+}
 
-    nvd_log("unmapping %p", addressBase);
-
-    IOMemoryMap* mapping = kernel_space_map[addressBase];
-    OSSafeReleaseNULL(mapping);
-    kernel_space_map.erase(addressBase);
+// Taken from the Linux kernel module.
+void os_flush_cpu_write_combine_buffer(void) {
+#if defined(NVCPU_X86_64)
+    asm volatile("sfence" ::: "memory");
+#elif defined(NVCPU_AARCH64)
+    asm volatile("dsb st" : : : "memory");
+#else
+#error Not sure how to flush memory
+#endif
 }
 }

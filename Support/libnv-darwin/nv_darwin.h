@@ -35,6 +35,17 @@ extern "C" {
 }
 #endif
 
+#if TARGET_OS_DRIVERKIT
+// In DriverKit land, we are a process external to the kernel.
+// We'll use our own `mach_task_self`.
+#define nvd_task mach_task_self
+#else
+// In actual kernel code, it's different - `mask_task_self`
+// represents the entire kernel, instead of our own KEXT task.
+// We'll want to instead use `current_task`.
+#define nvd_task current_task
+#endif
+
 typedef struct nv_darwin_state_s {
     nv_state_t nv_state;
     // Actually a PCIHorrorKit.

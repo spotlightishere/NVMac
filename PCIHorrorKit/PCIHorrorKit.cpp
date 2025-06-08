@@ -178,13 +178,13 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     rm_set_rm_firmware_requested(sp, nv);
     rm_notify_gpu_addition(sp, nv);
 
-    // NV_STATUS status = rm_init_adapter(sp, nv);
-    // if (status != NV_OK) {
-    //     nvd_log("got an error while initializing: %d", status);
-    // }
+    NV_STATUS status = rm_init_adapter(sp, nv);
+    if (status != NV_OK) {
+        nvd_log("got an error while initializing: %d", status);
+    }
 
-    char* result = rm_get_gpu_uuid(sp, nv);
-    nvd_log("ooh: %s", result);
+    //    char* result = rm_get_gpu_uuid(sp, nv);
+    //    nvd_log("ooh: %s", result);
 
     return ret;
 }

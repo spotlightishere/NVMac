@@ -37,6 +37,6 @@ const void* nv_get_firmware(nv_state_t* nv, nv_firmware_type_t fw_type,
 void nv_put_firmware(const void* fw_handle) {
     // We're given an OSMappedFile.
     OSMappedFile* outputFile = (OSMappedFile*)fw_handle;
-    outputFile->release();
+    OSSafeReleaseNULL(outputFile);
 }
 }

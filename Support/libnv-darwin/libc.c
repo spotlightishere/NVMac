@@ -154,17 +154,6 @@ void os_release_rwlock_write(void* pRwLock) {
 
 #pragma mark Synchronization - Sempahore
 
-#if TARGET_OS_DRIVERKIT
-// In DriverKit land, we are a process external to the kernel.
-// We'll use our own `mach_task_self`.
-#define semaphore_task mach_task_self
-#else
-// In actual kernel code, it's different - `mask_task_self`
-// represents the entire kernel, instead of our own KEXT task.
-// We'll want to instead use `current_task`.
-#define semaphore_task current_task
-#endif
-
 void* os_alloc_semaphore(NvU32 initialValue) {
     // Important note: in DriverKit land, the returned semaphore_t
     // is a mach_port_t (or, in more expanded form, uint32_t.)
@@ -175,12 +164,12 @@ void* os_alloc_semaphore(NvU32 initialValue) {
     semaphore_t* semaphore = (semaphore_t*)IOMalloc(sizeof(semaphore_t));
 
     // We set a policy of 0, or `SYNC_POLICY_FIFO`.
-    semaphore_create(semaphore_task(), semaphore, 0, initialValue);
+    semaphore_create(nvd_task(), semaphore, 0, initialValue);
     return (void*)semaphore;
 }
 
 void os_free_semaphore(void* pSema) {
-    semaphore_destroy(semaphore_task(), (semaphore_t)pSema);
+    semaphore_destroy(nvd_task(), (semaphore_t)pSema);
 
     // We allocated this, and must free it.
     IOFree(pSema, sizeof(semaphore_t));

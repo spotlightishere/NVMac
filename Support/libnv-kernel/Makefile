@@ -23,7 +23,7 @@ CFLAGS += -DNV_BSD=1
 # TODO(spotlightishere): This helps with debugging; remove eventually.
 CFLAGS += -DPORT_MEM_TRACK_PRINT_LEVEL=1
 CFLAGS += -DDEBUG=1
-CFLAGS += -DNV_PRINTF_STRINGS_ALLOWED=1
+CFLAGS += -g
 
 # We may be building for DriverKit.
 # Explicitly set SDKROOT.

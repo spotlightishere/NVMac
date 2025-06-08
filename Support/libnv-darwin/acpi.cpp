@@ -67,4 +67,8 @@ NV_STATUS NV_API_CALL nv_acpi_rom_method(nv_state_t* nv, NvU32* pInData,
 NV_STATUS NV_API_CALL nv_acpi_get_powersource(NvU32* ac_plugged) {
     return NV_ERR_NOT_SUPPORTED;
 }
+
+NvBool nv_platform_supports_s0ix(void) {
+    return NV_FALSE;
+}
 }
