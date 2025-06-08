@@ -7,6 +7,7 @@
 
 #include "nv_darwin.h"
 #include <cstdlib>
+#include <string>
 #include <time.h>
 
 extern "C" {
@@ -145,38 +146,67 @@ NV_STATUS os_delay(NvU32 MilliSeconds) {
 
 #pragma mark - Process Info
 
-// TODO(spotlightishere): Implement; threadId should be pid
-NV_STATUS os_get_current_thread(NvU64* threadId) {
-    return NV_ERR_NOT_SUPPORTED;
-}
-
-NV_STATUS os_get_euid(NvU32* pSecToken) {
-    return NV_ERR_NOT_SUPPORTED;
-}
-
-NvU64 os_get_max_user_va(void) {
-    // TODO(spotlightishere): Get from task_info
-    return 0;
-}
-
-NvU32 os_get_current_process(void) {
-    // TODO(spotlightishere): Get from task_info
-    return 0;
-}
-
-void os_get_current_process_name(char* buf, NvU32 len) {
-    // TODO(spotlightishere): Get from task_info
-    return;
-}
-
 void* os_get_pid_info(void) {
-    // TODO(spotlightishere): Implement
+    // This is used for PID resolution within
+    // namespaces, which we do not support.
     return NULL;
 }
 
+void os_put_pid_info(void* pid_info) {
+    // No-op - we did not allocate anything above.
+    return;
+}
+
+NV_STATUS os_find_ns_pid(void* pid_info, NvU32* ns_pid) {
+    // We have no concept of namespaces in XNU.
+    *ns_pid = os_get_current_process();
+    return NV_OK;
+}
+
+NvU32 os_get_current_process(void) {
+    int32_t pid = 0;
+    pid_for_task(nvd_task(), &pid);
+    return pid;
+}
+
 NvBool os_is_init_ns(void) {
-    // Namespaces on XNU? Not quite.
+    // We have no concept of namespaces in XNU.
     return NV_TRUE;
+}
+
+NV_STATUS os_get_current_thread(NvU64* threadId) {
+    // This API makes more sense under Linux, where
+    // this returns the process's actual PID.
+    *threadId = os_get_current_process();
+    return NV_OK;
+}
+
+NV_STATUS os_get_euid(NvU32* pSecToken) {
+#if TARGET_OS_DRIVERKIT
+    *pSecToken = geteuid();
+    return NV_OK;
+#else
+    // TODO: For kernel code, we want to look up get_bsdtask_info.
+#error Not yet implemented for kernel code.
+    return NV_ERR_NOT_SUPPORTED;
+#endif
+}
+
+void os_get_current_process_name(char* buf, NvU32 len) {
+    // Obtain from the current process's PID.
+    proc_name_t current_name;
+    int32_t pid = os_get_current_process();
+    proc_name(pid, current_name, sizeof(proc_name_t));
+
+    // Copy to client.
+    strncpy(buf, current_name, len);
+    return;
+}
+
+NvU64 os_get_max_user_va(void) {
+    // TODO(spotlightishere): This may not be
+    // something we can truly handle.
+    return 0;
 }
 
 NvBool os_is_administrator(void) {

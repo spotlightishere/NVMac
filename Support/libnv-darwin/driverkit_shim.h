@@ -29,6 +29,18 @@ typedef struct mach_timespec mach_timespec_t;
 typedef mach_port_t task_t;
 task_t mach_task_self(void);
 
+kern_return_t pid_for_task(task_t task, int32_t* pid);
+// proc_name_t is 2*MAXCOMLEN+1 bytes, and must remain
+// at this size in order to respect the existing ABI.
+// https://github.com/apple-oss-distributions/xnu/blob/e3723e1f17661b24996789d8afc084c0c3303b26/osfmk/mach/resource_monitors.h#L66-L77
+#define MAXCOMLEN 16
+typedef char proc_name_t[2 * MAXCOMLEN + 1];
+
+void proc_name(int pid, char* buf, int size);
+
+typedef uint32_t uid_t;
+uid_t geteuid(void);
+
 #pragma mark - os_unfair_lock
 
 /// Definition of `os_unfair_lock_s` for DriverKit.

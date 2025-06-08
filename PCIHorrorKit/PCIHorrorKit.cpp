@@ -11,12 +11,31 @@
 #include <DriverKit/IOLib.h>
 #include <DriverKit/IOUserServer.h>
 #include <PCIDriverKit/PCIDriverKit.h>
+#include <stdio.h>
 
 #include "PCIHorrorKit.h"
 #include "nv_darwin.h"
 
 /// Global state for the control device.
 nv_darwin_state_t nvd_state;
+
+/// Via DriverKit, functions such as `getFunctionNumber` are unavailable.
+/// We parse the `pcidebug` property on the actual IOPCIDevice,
+/// as its format is `domain:bus:slot`.
+/// https://github.com/apple-oss-distributions/IOPCIFamily/blob/c20e408a748150a8cce2937720ddaf54b6b082bb/IOPCIConfigurator.cpp#L723
+///
+/// This is a hack, and really not necessary.
+void PopulatePCIInfo(IOPCIDevice* device, nv_pci_info_t info) {
+    OSDictionary* properties = NULL;
+    device->CopyProperties(&properties);
+    OSObject* pcidebugProperty = properties->getObject("pcidebug");
+    OSString* pcidebug = OSRequiredCast(OSString, pcidebugProperty);
+    const char* rawString = pcidebug->getCStringNoCopy();
+
+    sscanf(rawString, "%u:%c:%c", &info.domain, &info.bus, &info.slot);
+
+    OSSafeReleaseNULL(properties);
+}
 
 bool PCIHorrorKit::init() {
     bool ret = super::init();
@@ -79,7 +98,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     uint16_t commandRegister;
     potentialDevice->ConfigurationRead16(kIOPCIConfigurationOffsetCommand,
                                          &commandRegister);
-    commandRegister |= (kIOPCICommandBusMaster | kIOPCICommandMemorySpace);
+    commandRegister |= (kIOPCICommandBusLead | kIOPCICommandMemorySpace);
     potentialDevice->ConfigurationWrite16(kIOPCIConfigurationOffsetCommand,
                                           commandRegister);
 
@@ -104,8 +123,6 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         break;
     }
 
-    // Query for future use.
-
     // Inform the RM of our OS-specific state.
     nv_state_t* nv = NV_STATE_PTR;
 
@@ -123,11 +140,10 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
                                          &nv->subsystem_id);
     potentialDevice->ConfigurationRead16(
         kIOPCIConfigurationOffsetSubSystemVendorID, &nv->subsystem_vendor);
+
+    // XXX(spotlightishere): This is a hack, but I'm a perfectionist.
+    PopulatePCIInfo(potentialDevice, nv->pci_info);
     nv->os_state = (void*)nvd_state;
-    // TODO(spotlightishere): Implement
-    nv->pci_info.domain = 0;
-    nv->pci_info.bus = 0;
-    nv->pci_info.slot = 0;
     nv->flags = 0;
     nv->handle = NV_GLOBAL_DEVICE;
 
@@ -183,8 +199,8 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
         nvd_log("got an error while initializing: %d", status);
     }
 
-    //    char* result = rm_get_gpu_uuid(sp, nv);
-    //    nvd_log("ooh: %s", result);
+    // char* result = rm_get_gpu_uuid(sp, nv);
+    // nvd_log("ooh: %s", result);
 
     return ret;
 }

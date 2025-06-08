@@ -13,7 +13,6 @@
 
 extern "C" {
 
-
 void* os_pci_init_handle(NvU32 domain, NvU8 bus, NvU8 slot, NvU8 function,
                          NvU16* vendor, NvU16* device) {
     // TODO(spotlightishere): We currently orient ourselves
@@ -41,7 +40,7 @@ NV_STATUS os_pci_read_byte(void* handle, NvU32 offset, NvU8* pReturnValue) {
         *pReturnValue = UINT8_MAX;
         return NV_ERR_NOT_SUPPORTED;
     }
-    
+
     NV_GLOBAL_DEVICE->MemoryRead8(0, offset, pReturnValue);
     return NV_OK;
 }
