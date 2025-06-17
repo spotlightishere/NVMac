@@ -37,19 +37,15 @@ void nvlink_print(const char* file, int line, const char* function,
         break;
     case NVLINK_DBG_LEVEL_USERERRORS:
         sys_log_level = "[NVLINK NOTICE] ";
-        ;
         break;
     case NVLINK_DBG_LEVEL_WARNINGS:
         sys_log_level = "[NVLINK WARNING] ";
-        ;
         break;
     case NVLINK_DBG_LEVEL_ERRORS:
         sys_log_level = "[NVLINK ERROR] ";
-        ;
         break;
     default:
         sys_log_level = "[NVLINK INFO] ";
-        ;
         break;
     }
 

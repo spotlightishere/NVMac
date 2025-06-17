@@ -44,6 +44,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4237F0D62DF6182700A148CD /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
+		4237F0D72DF6182E00A148CD /* libSystem.B.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.B.tbd; path = usr/lib/libSystem.B.tbd; sourceTree = SDKROOT; };
+		4237F0D82DF6183400A148CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4239C81E2DEEE9A2008481B4 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
 		4253FC9A2DEE941D006EC86E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4254DC352DEFFA2000871F6B /* PCIHorror.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCIHorror.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -329,6 +332,9 @@
 		426B441E2DEE64510091BF48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4237F0D82DF6183400A148CD /* Foundation.framework */,
+				4237F0D72DF6182E00A148CD /* libSystem.B.tbd */,
+				4237F0D62DF6182700A148CD /* libSystem.tbd */,
 				427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */,
 				427A914A2DF3284200CB6C21 /* libsystem_c.tbd */,
 				427A91482DF3281F00CB6C21 /* libSystem.tbd */,

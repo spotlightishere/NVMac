@@ -49,6 +49,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     kern_return_t ret = Start(provider, SUPERDISPATCH);
     if (ret != KERN_SUCCESS) {
         nvd_log("Error while starting service (return code %d)", ret);
+        Stop(provider);
         return ret;
     }
     nvd_state->service = (void*)this;
@@ -65,6 +66,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     IOPCIDevice* potentialDevice = OSDynamicCast(IOPCIDevice, provider);
     if (potentialDevice == NULL) {
         nvd_log("Provider is not IOPCIDevice?");
+        Stop(provider);
         return kIOReturnNoDevice;
     }
 
@@ -75,6 +77,7 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     ret = potentialDevice->Open(this, 0);
     if (ret != kIOReturnSuccess) {
         nvd_log("Error while opening PCI device (return code %d)", ret);
+        Stop(provider);
         return kIOReturnNoDevice;
     }
     uint16_t commandRegister;
@@ -123,8 +126,8 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
     potentialDevice->ConfigurationRead16(
         kIOPCIConfigurationOffsetSubSystemVendorID, &nv->subsystem_vendor);
 
-    nv_pci_info_t info = nv->pci_info;
-    potentialDevice->GetBusDeviceFunction(&info.bus, &info.slot, &info.function);
+    potentialDevice->GetBusDeviceFunction(&nv->pci_info.bus, &nv->pci_info.slot, &nv->pci_info.function);
+    nv->pci_info.domain = 2;
     nv->os_state = (void*)nvd_state;
     nv->flags = 0;
     nv->dma_dev = {};
@@ -188,8 +191,17 @@ kern_return_t PCIHorrorKit::Start_Impl(IOService* provider) {
 
 kern_return_t PCIHorrorKit::Stop_Impl(IOService* provider) {
     nvd_log("Stopping service...");
-    if (nvd_state->device != NULL) {
+    if (NV_GLOBAL_DEVICE != NULL) {
         NV_GLOBAL_DEVICE->Close(this, 0);
+        
+        // Disable operation.
+        uint16_t commandRegister = 0;
+        NV_GLOBAL_DEVICE->ConfigurationRead16(kIOPCIConfigurationOffsetCommand,
+                                             &commandRegister);
+        commandRegister |= (kIOPCICommandBusLead | kIOPCICommandMemorySpace);
+        NV_GLOBAL_DEVICE->ConfigurationWrite16(kIOPCIConfigurationOffsetCommand,
+                                              commandRegister);
+        nvd_state->device = NULL;
     }
 
     return Stop(provider, SUPERDISPATCH);

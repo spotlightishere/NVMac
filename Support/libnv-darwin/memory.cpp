@@ -140,10 +140,10 @@ void nv_set_dma_address_size(nv_state_t* nv, NvU32 phys_addr_bits) {
 
 #pragma mark - Kernel Mapping
 
-// TODO(spotlightishere): This is hardcoded
-NvU32 os_page_size = 4096;
+NvU32 os_page_size = (NvU32)IOVMPageSize;
 NvU64 os_page_mask = ~(os_page_size - 1);
-NvU8 os_page_shift = 12;
+// e.g. 1 << 12 is 4096, 1 << 14 is 16384.
+NvU8 os_page_shift = std::countr_zero(IOVMPageSize);
 
 void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
     nvd_log("[libnv-darwin] Mapping %p to size %llu", (void*)start, size_bytes);
