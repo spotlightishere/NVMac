@@ -16,7 +16,7 @@ extern "C" {
 #pragma mark - Memory Management
 
 NV_STATUS os_alloc_mem(void** address, NvU64 size) {
-    void* ptr = IOMalloc(size);
+    void* ptr = IOMallocZero(size);
     if (ptr == NULL) {
         return NV_ERR_NO_MEMORY;
     }
