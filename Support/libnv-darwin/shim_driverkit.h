@@ -23,10 +23,16 @@
 // Similarly, all OS types are as well.
 #include <DriverKit/OSDictionary.h>
 #include <DriverKit/OSNumber.h>
-#include <DriverKit/OSString.h
+#include <DriverKit/OSString.h>
 
 // Necessary for `mach_port_t`.
 #include <DriverKit/IORPC.h>
+
+// Various I/O functions
+#include <stdio.h>
+
+// `clock_gettime_nsec_np`
+#include <time.h>
 
 #ifdef __cplusplus
 extern "C" {

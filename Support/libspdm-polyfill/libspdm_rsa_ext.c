@@ -5,10 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <sys/types.h>
+#include "libspdm_polyfill.h"
 
 bool libspdm_rsa_pss_sign(void* rsa_context, size_t hash_nid,
                           const uint8_t* message_hash, size_t hash_size,

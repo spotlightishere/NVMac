@@ -5,9 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include "libspdm_polyfill.h"
 
 bool libspdm_hkdf_sha256_extract(const uint8_t* key, size_t key_size,
                                  const uint8_t* salt, size_t salt_size,

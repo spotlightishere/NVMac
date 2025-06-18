@@ -5,7 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
-#include <stdbool.h>
+#include "libspdm_polyfill.h"
 
 bool libspdm_check_crypto_backend(void) {
     // Stubbed. We have no backend.

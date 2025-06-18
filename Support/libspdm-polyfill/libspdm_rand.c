@@ -5,9 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <sys/types.h>
+#include "libspdm_polyfill.h"
 
 bool libspdm_random_bytes(uint8_t* output, size_t size) {
     // Stubbed

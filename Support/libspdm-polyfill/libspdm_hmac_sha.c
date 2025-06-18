@@ -5,9 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include "libspdm_polyfill.h"
 
 void* libspdm_hmac_sha256_new(void) {
     // Stubbed

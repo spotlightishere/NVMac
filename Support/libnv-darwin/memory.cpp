@@ -6,6 +6,7 @@
 //
 
 #include "nv_darwin.h"
+#include <bit>
 #include <os/nv_memory_type.h>
 
 #pragma mark - Internal Mapping
@@ -135,15 +136,15 @@ void nv_set_dma_address_size(nv_state_t* nv, NvU32 phys_addr_bits) {
 #pragma mark - Kernel Mapping
 
 #ifdef TARGET_OS_DRIVERKIT
-NvU32 os_page_size = (NvU32)PAGE_SIZE;
-NvU64 os_page_mask = (NvU64)PAGE_MASK;
-// e.g. 1 << 12 is 4096, 1 << 14 is 16384.
-NvU8 os_page_shift = (NvU8)PAGE_SHIFT;
-#else
 NvU32 os_page_size = (NvU32)IOVMPageSize;
 NvU64 os_page_mask = ~(os_page_size - 1);
 // e.g. 1 << 12 is 4096, 1 << 14 is 16384.
 NvU8 os_page_shift = std::countr_zero(os_page_size);
+#else
+NvU32 os_page_size = (NvU32)PAGE_SIZE;
+NvU64 os_page_mask = (NvU64)PAGE_MASK;
+// e.g. 1 << 12 is 4096, 1 << 14 is 16384.
+NvU8 os_page_shift = (NvU8)PAGE_SHIFT;
 #endif
 
 void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {

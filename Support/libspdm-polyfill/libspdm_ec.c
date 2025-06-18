@@ -5,9 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include "libspdm_polyfill.h"
 
 bool libspdm_ec_compute_key(void* ec_context, const uint8_t* peer_public,
                             size_t peer_public_size, uint8_t* key,
