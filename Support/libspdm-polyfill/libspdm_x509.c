@@ -5,8 +5,10 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
+#include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 bool libspdm_x509_construct_certificate(const uint8_t* cert, size_t cert_size,
                                         uint8_t** single_x509_cert) {

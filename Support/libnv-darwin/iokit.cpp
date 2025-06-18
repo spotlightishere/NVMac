@@ -6,8 +6,6 @@
 //
 
 #include "nv_darwin.h"
-#include <DriverKit/OSDictionary.h>
-#include <string>
 
 extern "C" {
 

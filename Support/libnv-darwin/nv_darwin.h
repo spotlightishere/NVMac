@@ -8,14 +8,14 @@
 #ifndef nv_darwin_h
 #define nv_darwin_h
 
-// Import the correct IOKit headers for this target.
+// Implementations slightly differ between DriverKit
+// and the in-kernel extension.
+//
+// These differences are present within their respective shims.
 #if TARGET_OS_DRIVERKIT
-#include <DriverKit/IOLib.h>
-
-#include "driverkit_shim.h"
-
+#include "shim_driverkit.h"
 #else
-#include <IOKit/IOLib.h>
+#include "shim_kernel.h"
 #endif
 
 #include <os/log.h>
@@ -33,17 +33,6 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
-
-#if TARGET_OS_DRIVERKIT
-// In DriverKit land, we are a process external to the kernel.
-// We'll use our own `mach_task_self`.
-#define nvd_task mach_task_self
-#else
-// In actual kernel code, it's different - `mask_task_self`
-// represents the entire kernel, instead of our own KEXT task.
-// We'll want to instead use `current_task`.
-#define nvd_task current_task
 #endif
 
 typedef struct nv_darwin_state_s {

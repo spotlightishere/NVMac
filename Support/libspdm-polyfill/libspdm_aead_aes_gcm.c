@@ -6,6 +6,7 @@
 //
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 bool libspdm_aead_aes_gcm_encrypt(const uint8_t* key, size_t key_size,

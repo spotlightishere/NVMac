@@ -6,6 +6,7 @@
 //
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 bool libspdm_ec_compute_key(void* ec_context, const uint8_t* peer_public,

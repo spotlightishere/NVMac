@@ -6,6 +6,7 @@
 //
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 bool libspdm_hkdf_sha256_extract(const uint8_t* key, size_t key_size,

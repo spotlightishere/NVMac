@@ -7,6 +7,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 bool libspdm_random_bytes(uint8_t* output, size_t size) {
     // Stubbed

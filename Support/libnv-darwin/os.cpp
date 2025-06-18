@@ -6,9 +6,7 @@
 //
 
 #include "nv_darwin.h"
-#include <cstdlib>
-#include <string>
-#include <time.h>
+#include <sys/time.h>
 
 extern "C" {
 // NVIDIA has their own function called `os_log_error`.
@@ -124,8 +122,16 @@ NvBool nv_is_chassis_notebook(void) {
 #define NSEC_PER_USEC 1000ull
 #define NSEC_PER_SEC 1000000000ull
 
+#if TARGET_OS_DRIVERKIT
+// DriverKit prefers clock_gettime_nsec_np.
+#define CURRENT_UPTIME clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
+#else
+// We can use mach_absolute_time within the kernel.
+#define CURRENT_UPTIME mach_absolute_time()
+#endif
+
 NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {
-    uint64_t nanoseconds = clock_gettime_nsec_np(CLOCK_REALTIME);
+    uint64_t nanoseconds = CURRENT_UPTIME;
     uint64_t currentMicroseconds = nanoseconds / NSEC_PER_USEC;
     uint64_t currentSeconds = nanoseconds / NSEC_PER_SEC;
     *useconds = (NvU32)currentMicroseconds;
@@ -134,11 +140,11 @@ NV_STATUS os_get_current_time(NvU32* seconds, NvU32* useconds) {
 }
 
 NvU64 os_get_current_tick_hr(void) {
-    return clock_gettime_nsec_np(CLOCK_UPTIME_RAW);
+    return CURRENT_UPTIME;
 }
 
 NvU64 os_get_current_tick(void) {
-    return clock_gettime_nsec_np(CLOCK_UPTIME_RAW);
+    return CURRENT_UPTIME;
 }
 
 NV_STATUS os_delay_us(NvU32 MicroSeconds) {
@@ -194,19 +200,20 @@ NV_STATUS os_get_euid(NvU32* pSecToken) {
     return NV_OK;
 #else
     // TODO: For kernel code, we want to look up get_bsdtask_info.
-#error Not yet implemented for kernel code.
+    // #error Not yet implemented for kernel code.
     return NV_ERR_NOT_SUPPORTED;
 #endif
 }
 
 void os_get_current_process_name(char* buf, NvU32 len) {
-    // Obtain from the current process's PID.
-    proc_name_t current_name;
-    int32_t pid = os_get_current_process();
-    proc_name(pid, current_name, sizeof(proc_name_t));
-
-    // Copy to client.
-    strncpy(buf, current_name, len);
+    //    // Obtain from the current process's PID.
+    //    proc_name_t current_name;
+    //    int32_t pid = os_get_current_process();
+    //    proc_name(pid, current_name, sizeof(proc_name_t));
+    //
+    //    // Copy to client.
+    //    strncpy(buf, current_name, len);
+    buf[0] = '\0';
     return;
 }
 
@@ -256,7 +263,7 @@ NV_STATUS os_get_numa_node_memory_usage(NvS32 node_id, NvU64* free_memory_bytes,
 }
 
 NV_STATUS os_get_random_bytes(NvU8* bytes, NvU16 numBytes) {
-    arc4random_buf(bytes, numBytes);
+    // arc4random_buf(bytes, numBytes);
     return NV_OK;
 }
 

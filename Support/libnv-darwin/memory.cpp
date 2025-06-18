@@ -6,19 +6,13 @@
 //
 
 #include "nv_darwin.h"
-#include <DriverKit/IOBufferMemoryDescriptor.h>
-#include <DriverKit/IOCommandPool.h>
-#include <DriverKit/IODMACommand.h>
-#include <DriverKit/IOMemoryMap.h>
-#include <PCIDriverKit/PCIDriverKit.h>
-#include <map>
 #include <os/nv_memory_type.h>
 
 #pragma mark - Internal Mapping
 
 /// A global map of buffer pointers to their underlying IOMemoryMapping.
 // TODO(spotlightishere): There's no way this will scale
-std::map<void*, IOMemoryMap*> global_mapped_memory{};
+static OSDictionary* global_mapped_memory = OSDictionary::withCapacity(16);
 
 extern "C" {
 
@@ -140,10 +134,17 @@ void nv_set_dma_address_size(nv_state_t* nv, NvU32 phys_addr_bits) {
 
 #pragma mark - Kernel Mapping
 
+#ifdef TARGET_OS_DRIVERKIT
+NvU32 os_page_size = (NvU32)PAGE_SIZE;
+NvU64 os_page_mask = (NvU64)PAGE_MASK;
+// e.g. 1 << 12 is 4096, 1 << 14 is 16384.
+NvU8 os_page_shift = (NvU8)PAGE_SHIFT;
+#else
 NvU32 os_page_size = (NvU32)IOVMPageSize;
 NvU64 os_page_mask = ~(os_page_size - 1);
 // e.g. 1 << 12 is 4096, 1 << 14 is 16384.
-NvU8 os_page_shift = std::countr_zero(IOVMPageSize);
+NvU8 os_page_shift = std::countr_zero(os_page_size);
+#endif
 
 void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
     nvd_log("[libnv-darwin] Mapping %p to size %llu", (void*)start, size_bytes);
@@ -197,7 +198,17 @@ void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
     // TODO(spotlightishere): Determine a better way
     // to manage mappings such as this.
     void* addressBase = (void*)mapping->GetAddress();
-    global_mapped_memory[addressBase] = mapping;
+
+    // We expect `%p` to produce format `0xabcdef0123456789`.
+    // This should be twice its size (e.g. 8 bytes -> 16 characters),
+    // and have the suffix `0x` at the beginning.
+    constexpr auto keyNameLength = (sizeof(void*) * 2) + 2;
+    char keyName[keyNameLength] = {};
+    snprintf(keyName, keyNameLength, "%p", addressBase);
+
+    // TODO(spotlightishere): =(
+    global_mapped_memory->setObject(keyName, mapping);
+
     OSSafeReleaseNULL(returnMemory);
     nvd_log("[libnv-darwin] Mapped to %p", addressBase);
 
@@ -205,9 +216,16 @@ void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
 }
 
 void os_unmap_kernel_space(void* addressBase, NvU64 size_bytes) {
+    // TODO(spotlightishere): Please refer to above :(
+    constexpr auto keyNameLength = (sizeof(void*) * 2) + 2;
+    char keyName[keyNameLength] = {};
+    snprintf(keyName, keyNameLength, "%p", addressBase);
+
     // No need to leverage byte size - we already have an IOMemoryMap
     // that will handle unmapping on our behalf.
-    if (global_mapped_memory.contains(addressBase) == false) {
+    OSObject* object = global_mapped_memory->getObject(keyName);
+    IOMemoryMap* mapping = OSRequiredCast(IOMemoryMap, object);
+    if (mapping == NULL) {
         nvd_log(
             "TEMP panic Memory was unmapped for pointer that does not exist!");
         return;
@@ -215,9 +233,7 @@ void os_unmap_kernel_space(void* addressBase, NvU64 size_bytes) {
 
     nvd_log("[libnv-darwin] unmapping %p", addressBase);
 
-    IOMemoryMap* mapping = global_mapped_memory[addressBase];
-    OSSafeReleaseNULL(mapping);
-    global_mapped_memory.erase(addressBase);
+    global_mapped_memory->removeObject(keyName);
 }
 
 #pragma mark - DMA

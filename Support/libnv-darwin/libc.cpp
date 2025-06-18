@@ -1,13 +1,70 @@
 //
-//  libc.c
+//  libc.cpp
 //  nv-darwin
 //
 //  Created by Spotlight Deveaux on 2025-06-05.
 //
 
 #include "nv_darwin.h"
-#include <stdio.h>
-#include <string.h>
+
+// TODO(spotlightishere): There's no way this will scale
+static OSDictionary* global_allocations = OSDictionary::withCapacity(16);
+
+extern "C" {
+
+#pragma mark - Memory Management
+
+NV_STATUS os_alloc_mem(void** address, NvU64 size) {
+    void* ptr = IOMallocZero(size);
+    if (ptr == NULL) {
+        return NV_ERR_NO_MEMORY;
+    }
+
+    // TODO(spotlightishere): I apologize.
+    // We expect `%p` to produce format `0xabcdef0123456789`.
+    // This should be twice its size (e.g. 8 bytes -> 16 characters),
+    // and have the suffix `0x` at the beginning.
+    constexpr auto keyNameLength = (sizeof(void*) * 2) + 2;
+    char keyName[keyNameLength] = {};
+    snprintf(keyName, keyNameLength, "%p", ptr);
+
+    // Our key is our pointer in string form.
+    OSString* key = OSString::withCString(keyName);
+    // Our value is our size as an OSNumber.
+    OSNumber* value = OSNumber::withNumber(size, sizeof(NvU64));
+
+    // TODO(spotlightishere): =(
+    global_allocations->setObject(key, value);
+    *address = ptr;
+
+    OSSafeReleaseNULL(key);
+    OSSafeReleaseNULL(value);
+    return NV_OK;
+}
+
+void os_free_mem(void* ptr) {
+    // TODO(spotlightishere): Please refer to above :(
+    constexpr auto keyNameLength = (sizeof(void*) * 2) + 2;
+    char keyName[keyNameLength] = {};
+    snprintf(keyName, keyNameLength, "%p", ptr);
+
+    // Our key is our pointer in string form.
+    OSString* key = OSString::withCString(keyName);
+    OSObject* object = global_allocations->getObject(key);
+    if (object == NULL) {
+        nvd_log("TODO Pointer was freed for allocation that does not exist!");
+
+        OSSafeReleaseNULL(key);
+        return;
+    }
+
+    OSNumber* allocationValue = OSRequiredCast(OSNumber, object);
+    uint64_t allocationSize = allocationValue->unsigned64BitValue();
+    IOFree(ptr, allocationSize);
+
+    global_allocations->removeObject(key);
+    OSSafeReleaseNULL(key);
+}
 
 #pragma mark - Strings
 
@@ -54,45 +111,52 @@ NvU32 os_strtoul(const char* str, char** endptr, NvU32 base) {
 #pragma mark - Spinlock
 
 NV_STATUS os_alloc_spinlock(void** ppSpinlock) {
-    void* spinlock = IOMallocZero(sizeof(os_unfair_lock));
+    void* spinlock = IOSimpleLockAlloc();
     *ppSpinlock = spinlock;
-    return NV_OK;
+
+    if (spinlock == NULL) {
+        return NV_ERR_NO_MEMORY;
+    } else {
+        return NV_OK;
+    }
 }
 
 void os_free_spinlock(void* pSpinlock) {
-    IOFree(pSpinlock, sizeof(os_unfair_lock));
+    IOSimpleLockFree((IOSimpleLock*)pSpinlock);
 }
 
 // Return value are flags that we do not respect.
 NvU64 os_acquire_spinlock(void* pSpinlock) {
-    os_unfair_lock_lock((os_unfair_lock_t)pSpinlock);
+    IOSimpleLockLock((IOSimpleLock*)pSpinlock);
     return 0;
 }
 
 void os_release_spinlock(void* pSpinlock, NvU64 oldIrql) {
-    os_unfair_lock_unlock((os_unfair_lock_t)pSpinlock);
+    IOSimpleLockUnlock((IOSimpleLock*)pSpinlock);
 }
 
 #pragma mark Synchronization - Mutex
 
 NV_STATUS os_alloc_mutex(void** ppMutex) {
-    void* mutex = IOMalloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init((pthread_mutex_t*)mutex, NULL);
-    *ppMutex = mutex;
-    return NV_OK;
+    IOLock* lock = IOLockAlloc();
+    if (lock == NULL) {
+        return NV_ERR_NO_MEMORY;
+    } else {
+        return NV_OK;
+    }
 }
 
 void os_free_mutex(void* pMutex) {
-    IOFree(pMutex, sizeof(pthread_mutex_t));
+    IOLockFree((IOLock*)pMutex);
 }
 
 NV_STATUS os_acquire_mutex(void* pMutex) {
-    pthread_mutex_lock((pthread_mutex_t*)pMutex);
+    IOLockLock((IOLock*)pMutex);
     return NV_OK;
 }
 
 NV_STATUS os_cond_acquire_mutex(void* pMutex) {
-    int result = pthread_mutex_trylock((pthread_mutex_t*)pMutex);
+    bool result = IOLockTryLock((IOLock*)pMutex);
     if (result == 0) {
         return NV_OK;
     } else {
@@ -101,55 +165,45 @@ NV_STATUS os_cond_acquire_mutex(void* pMutex) {
 }
 
 void os_release_mutex(void* pMutex) {
-    pthread_mutex_unlock((pthread_mutex_t*)pMutex);
+    IOLockUnlock((IOLock *)pMutex);
 }
 
 #pragma mark Synchronization - R/W Lock
 
-void* NV_API_CALL os_alloc_rwlock(void) {
-    void* rwlock = IOMalloc(sizeof(pthread_rwlock_t));
-    pthread_rwlock_init((pthread_rwlock_t*)rwlock, NULL);
-    return rwlock;
+void* os_alloc_rwlock(void) {
+    return IORWLockAlloc();
 }
 
 void os_free_rwlock(void* pRwLock) {
-    IOFree(pRwLock, sizeof(pthread_rwlock_t));
+    IORWLockFree((IORWLock *)pRwLock);
 }
 
 NV_STATUS os_acquire_rwlock_read(void* pRwLock) {
-    pthread_rwlock_rdlock((pthread_rwlock_t*)pRwLock);
+    IORWLockRead((IORWLock *)pRwLock);
     return NV_OK;
 }
 
 NV_STATUS os_acquire_rwlock_write(void* pRwLock) {
-    pthread_rwlock_wrlock((pthread_rwlock_t*)pRwLock);
+    IORWLockWrite((IORWLock *)pRwLock);
     return NV_OK;
 }
 
 NV_STATUS os_cond_acquire_rwlock_read(void* pRwLock) {
-    int result = pthread_rwlock_tryrdlock((pthread_rwlock_t*)pRwLock);
-    if (result == 0) {
-        return NV_OK;
-    } else {
-        return NV_ERR_TIMEOUT_RETRY;
-    }
+    IORWLockTryRead((IORWLock *)pRwLock);
+    return NV_OK;
 }
 
 NV_STATUS os_cond_acquire_rwlock_write(void* pRwLock) {
-    int result = pthread_rwlock_tryrdlock((pthread_rwlock_t*)pRwLock);
-    if (result == 0) {
-        return NV_OK;
-    } else {
-        return NV_ERR_TIMEOUT_RETRY;
-    }
+    IORWLockTryWrite((IORWLock *)pRwLock);
+    return NV_OK;
 }
 
 void os_release_rwlock_read(void* pRwLock) {
-    pthread_rwlock_unlock((pthread_rwlock_t*)pRwLock);
+    IORWLockUnlock((IORWLock *)pRwLock);
 }
 
 void os_release_rwlock_write(void* pRwLock) {
-    pthread_rwlock_unlock((pthread_rwlock_t*)pRwLock);
+    IORWLockUnlock((IORWLock *)pRwLock);
 }
 
 #pragma mark Synchronization - Sempahore
@@ -186,6 +240,7 @@ NV_STATUS os_acquire_semaphore(void* pSema) {
 }
 
 NV_STATUS os_cond_acquire_semaphore(void* pSema) {
+#if TARGET_OS_DRIVERKIT
     // The rest of the kernel has `semaphore_wait_noblock`
     // which calls `semaphore_wait` with the internal option
     // `SEMAPHORE_TIMEOUT_NOBLOCK`.
@@ -197,7 +252,9 @@ NV_STATUS os_cond_acquire_semaphore(void* pSema) {
     mach_timespec_t instant_timeout = {.tv_sec = 0, .tv_nsec = 0};
     kern_return_t result =
         semaphore_timedwait((semaphore_t)pSema, instant_timeout);
-
+#else
+    kern_return_t result = semaphore_wait_noblock((semaphore_t)pSema);
+#endif
     switch (result) {
     case KERN_OPERATION_TIMED_OUT:
         return NV_ERR_TIMEOUT_RETRY;
@@ -211,4 +268,5 @@ NV_STATUS os_cond_acquire_semaphore(void* pSema) {
 NV_STATUS os_release_semaphore(void* pSema) {
     semaphore_wait((semaphore_t)pSema);
     return NV_OK;
+}
 }

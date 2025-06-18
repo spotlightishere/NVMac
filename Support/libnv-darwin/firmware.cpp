@@ -6,8 +6,13 @@
 //
 
 #include "nv_darwin.h"
+
+#if TARGET_OS_DRIVERKIT
+// We can use OSBundle and OSMappedFile within userspace.
 #include <DriverKit/OSBundle.h>
-#include <string>
+#else
+
+#endif
 
 extern "C" {
 
@@ -17,6 +22,7 @@ const void* nv_get_firmware(nv_state_t* nv, nv_firmware_type_t fw_type,
     const char* firmwarePath =
         nv_firmware_for_chip_family(fw_type, fw_chip_family);
 
+#if TARGET_OS_DRIVERKIT
     // Load the firmware from our KEXT/DEXT's bundle.
     OSBundle* currentBundle = OSBundle::mainBundle();
     OSMappedFile* outputFile = NULL;
@@ -30,13 +36,26 @@ const void* nv_get_firmware(nv_state_t* nv, nv_firmware_type_t fw_type,
 
     *fw_size = (NvU32)outputFile->size();
     *fw_buf = outputFile->data();
-
     return outputFile;
+#else
+    // TODO(spotlightishere): Uh oh
+
+    const uint8_t gsp_ga10x[] = {
+#embed "../nvidia-binary-driver/firmware/gsp_ga10x.bin"
+    };
+    *fw_buf = gsp_ga10x;
+    *fw_size = sizeof(gsp_ga10x);
+    return gsp_ga10x;
+#endif
 }
 
 void nv_put_firmware(const void* fw_handle) {
+#if TARGET_OS_DRIVERKIT
     // We're given an OSMappedFile.
     OSMappedFile* outputFile = (OSMappedFile*)fw_handle;
     OSSafeReleaseNULL(outputFile);
+#else
+    // nothing necessary
+#endif
 }
 }

@@ -6,7 +6,6 @@
 //
 
 #include "nv_darwin.h"
-#include <string>
 
 extern "C" {
 
@@ -16,25 +15,27 @@ void out_string(const char* str) {
     nvd_log("%s", str);
 }
 
+// TODO(spotlightishere): We should probably do better here
+#define MAX_LOG_STRING_LENGTH 8192
+
 int nv_printf(NvU32 debuglevel, const char* printf_format, ...) {
     // TODO(spotlightishere): Respect debug level
     va_list args;
     va_start(args, printf_format);
 
-    char* message;
-    int length = vasprintf(&message, printf_format, args);
+    char message[MAX_LOG_STRING_LENGTH] = {};
+    vsnprintf(message, MAX_LOG_STRING_LENGTH, printf_format, args);
 
     nvd_log("[Level %d] %s", debuglevel, message);
     va_end(args);
-    IOFree(message, length);
 
     return 0;
 }
 
 NV_STATUS nv_log_error(nv_state_t* nv, NvU32 error_number, const char* format,
                        va_list ap) {
-    char* message;
-    int length = vasprintf(&message, format, ap);
+    char message[MAX_LOG_STRING_LENGTH] = {};
+    int length = vsnprintf(message, MAX_LOG_STRING_LENGTH, format, ap);
 
     nvd_log("[ERROR CODE %d] %s", error_number, message);
     IOFree(message, length);

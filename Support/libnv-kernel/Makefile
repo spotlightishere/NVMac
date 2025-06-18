@@ -24,6 +24,7 @@ CFLAGS += -DNV_BSD=1
 CFLAGS += -DPORT_MEM_TRACK_PRINT_LEVEL=1
 CFLAGS += -DDEBUG=1
 CFLAGS += -g
+CFLAGS += -O0
 
 # We may be building for DriverKit.
 # Explicitly set SDKROOT.

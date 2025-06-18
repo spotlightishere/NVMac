@@ -6,6 +6,7 @@
 //
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 void* libspdm_hmac_sha256_new(void) {

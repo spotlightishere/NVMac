@@ -1,12 +1,29 @@
 //
-//  driverkit_shim.h
-//  NVMac
+//  shim_driverkit.h
+//  libnv-darwin
 //
 //  Created by Spotlight Deveaux on 2025-06-06.
 //
 
-#ifndef driverkit_shim_h
-#define driverkit_shim_h
+#ifndef shim_driverkit_h
+#define shim_driverkit_h
+
+#pragma mark - Imports
+
+// All IOKit types are exported within DriverKit.framework.
+#include <DriverKit/IOBufferMemoryDescriptor.h>
+#include <DriverKit/IOCommandPool.h>
+#include <DriverKit/IODMACommand.h>
+#include <DriverKit/IOLib.h>
+#include <DriverKit/IOMemoryMap.h>
+
+// IOPCIDevice
+#include <PCIDriverKit/PCIDriverKit.h>
+
+// Similarly, all OS types are as well.
+#include <DriverKit/OSDictionary.h>
+#include <DriverKit/OSNumber.h>
+#include <DriverKit/OSString.h
 
 // Necessary for `mach_port_t`.
 #include <DriverKit/IORPC.h>
@@ -29,6 +46,10 @@ typedef struct mach_timespec mach_timespec_t;
 typedef mach_port_t task_t;
 task_t mach_task_self(void);
 
+// In DriverKit land, we are a process external to the kernel.
+// We'll use our own `mach_task_self` for `nvd_task`.
+#define nvd_task mach_task_self
+
 kern_return_t pid_for_task(task_t task, int32_t* pid);
 // proc_name_t is 2*MAXCOMLEN+1 bytes, and must remain
 // at this size in order to respect the existing ABI.
@@ -40,66 +61,6 @@ void proc_name(int pid, char* buf, int size);
 
 typedef uint32_t uid_t;
 uid_t geteuid(void);
-
-#pragma mark - os_unfair_lock
-
-/// Definition of `os_unfair_lock_s` for DriverKit.
-/// https://github.com/apple-oss-distributions/libplatform/blob/9ca0fd4b4be3ee51eef43664ef75946188dfd343/include/os/lock.h#L86-L89
-// TODO(spotlightishere): There has to be a better way to do this...
-typedef struct os_unfair_lock_s {
-    uint32_t _os_unfair_lock_opaque;
-} os_unfair_lock, *os_unfair_lock_t;
-
-void os_unfair_lock_lock(os_unfair_lock_t lock);
-void os_unfair_lock_unlock(os_unfair_lock_t lock);
-
-#pragma mark - pthread mutex
-typedef os_unfair_lock _pthread_lock;
-
-typedef struct _pthread_mutex_ulock_s {
-    uint32_t uval;
-}* _pthread_mutex_ulock_t;
-
-// Edited to assume __LP64__ since we really need size.
-typedef struct pthread_mutex_s {
-    long sig;
-    _pthread_lock lock;
-    uint32_t value;
-    int16_t prioceiling;
-    int16_t priority;
-    uint32_t _pad;
-    uint32_t m_tid[2];
-    uint32_t m_seq[2];
-    uint32_t m_mis[2];
-    uint32_t _reserved[4];
-} pthread_mutex_t;
-
-int pthread_mutex_init(pthread_mutex_t* mutex, void* attr);
-int pthread_mutex_destroy(pthread_mutex_t* mutex);
-int pthread_mutex_lock(pthread_mutex_t* mutex);
-int pthread_mutex_trylock(pthread_mutex_t* mutex);
-int pthread_mutex_unlock(pthread_mutex_t* mutex);
-
-#pragma mark - pthread rw lock
-
-typedef struct pthread_rwlock_s {
-    long sig;
-    _pthread_lock lock;
-    uint32_t unused : 29, misalign : 1, pshared : 2;
-    uint32_t rw_flags;
-    uint32_t _pad;
-    uint32_t rw_tid[2];
-    uint32_t rw_seq[4];
-    uint32_t rw_mis[4];
-    uint32_t _reserved[34];
-} pthread_rwlock_t;
-
-int pthread_rwlock_init(pthread_rwlock_t* rwlock, void* attr);
-int pthread_rwlock_rdlock(pthread_rwlock_t* rwlock);
-int pthread_rwlock_tryrdlock(pthread_rwlock_t* rwlock);
-int pthread_rwlock_wrlock(pthread_rwlock_t* rwlock);
-int pthread_rwlock_trywrlock(pthread_rwlock_t* rwlock);
-int pthread_rwlock_unlock(pthread_rwlock_t* rwlock);
 
 #pragma mark - Semaphore
 

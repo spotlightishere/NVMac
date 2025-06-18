@@ -5,8 +5,10 @@
 //  Created by Spotlight Deveaux on 2025-06-04.
 //
 
+#include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 void* libspdm_sha256_new(void) {
     // Stubbed

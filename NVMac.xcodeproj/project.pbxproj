@@ -7,14 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4252EB502E023A04003F3853 /* PCIDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4252EB4F2E023A04003F3853 /* PCIDriverKit.framework */; };
 		4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4239C81E2DEEE9A2008481B4 /* DriverKit.framework */; };
 		4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */; };
 		425D7EC02DF305BE0076989D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425D7EBF2DF305BD0076989D /* IOKit.framework */; };
 		425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 425D7EC42DF30C530076989D /* libsystem_platform.tbd */; };
 		4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80B2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a */; };
 		4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80D2DF1451600544179 /* nv-kernel-macosx.a */; };
-		427A91472DF324E800CB6C21 /* libsystem_pthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */; };
 		427A914B2DF3284700CB6C21 /* libsystem_c.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A914A2DF3284200CB6C21 /* libsystem_c.tbd */; };
 		427A91522DF3521500CB6C21 /* libsystem_kernel.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */; };
 /* End PBXBuildFile section */
@@ -48,22 +47,28 @@
 		4237F0D72DF6182E00A148CD /* libSystem.B.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.B.tbd; path = usr/lib/libSystem.B.tbd; sourceTree = SDKROOT; };
 		4237F0D82DF6183400A148CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4239C81E2DEEE9A2008481B4 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
+		424844562E01EDFA007519A2 /* libsystem_platform.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_platform.tbd; path = usr/lib/system/libsystem_platform.tbd; sourceTree = SDKROOT; };
+		4252EB4F2E023A04003F3853 /* PCIDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCIDriverKit.framework; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/System/Library/Frameworks/PCIDriverKit.framework; sourceTree = DEVELOPER_DIR; };
 		4253FC9A2DEE941D006EC86E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4254DC352DEFFA2000871F6B /* PCIHorror.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCIHorror.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = space.joscomputing.PCIHorror.PCIHorrorKit.dext; sourceTree = BUILT_PRODUCTS_DIR; };
-		4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCIDriverKit.framework; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/System/Library/Frameworks/PCIDriverKit.framework; sourceTree = DEVELOPER_DIR; };
+		4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCIDriverKit.framework; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/System/Library/Frameworks/PCIDriverKit.framework; sourceTree = DEVELOPER_DIR; };
+		425855012E01B3EA00EB6D71 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
+		425856B32E01BBB800EB6D71 /* libsystem_kernel.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_kernel.tbd; path = usr/lib/system/libsystem_kernel.tbd; sourceTree = SDKROOT; };
 		425D7EBF2DF305BD0076989D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		425D7EC42DF30C530076989D /* libsystem_platform.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_platform.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_platform.tbd; sourceTree = DEVELOPER_DIR; };
+		425D7EC42DF30C530076989D /* libsystem_platform.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_platform.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/usr/lib/system/libsystem_platform.tbd; sourceTree = DEVELOPER_DIR; };
 		4261A7E22DF13CA200544179 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "libnv-kernel.xcconfig"; sourceTree = "<group>"; };
 		4261A80B2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "../Debug-driverkit/nv-kernel-driverkit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4261A80D2DF1451600544179 /* nv-kernel-macosx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "nv-kernel-macosx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		426B44042DEE5C770091BF48 /* NVMacRM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NVMacRM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		426B441F2DEE64510091BF48 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = usr/lib/libkmod.a; sourceTree = SDKROOT; };
-		427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_pthread.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_pthread.tbd; sourceTree = DEVELOPER_DIR; };
-		427A91482DF3281F00CB6C21 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/libSystem.tbd; sourceTree = DEVELOPER_DIR; };
-		427A914A2DF3284200CB6C21 /* libsystem_c.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_c.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_c.tbd; sourceTree = DEVELOPER_DIR; };
-		427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_kernel.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit24.5.sdk/System/DriverKit/usr/lib/system/libsystem_kernel.tbd; sourceTree = DEVELOPER_DIR; };
+		427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_pthread.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/usr/lib/system/libsystem_pthread.tbd; sourceTree = DEVELOPER_DIR; };
+		427A91482DF3281F00CB6C21 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/usr/lib/libSystem.tbd; sourceTree = DEVELOPER_DIR; };
+		427A914A2DF3284200CB6C21 /* libsystem_c.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_c.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/usr/lib/system/libsystem_c.tbd; sourceTree = DEVELOPER_DIR; };
+		427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_kernel.tbd; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/usr/lib/system/libsystem_kernel.tbd; sourceTree = DEVELOPER_DIR; };
+		42E2D2642E0213AC0036D9D7 /* libsystem_pthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_pthread.tbd; path = usr/lib/system/libsystem_pthread.tbd; sourceTree = SDKROOT; };
+		42E2D2652E0213B80036D9D7 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
 		42F99BAE2DEE9E7500BBD8A7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,17 +97,16 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
-				driverkit_shim.h,
 				firmware.cpp,
 				iokit.cpp,
-				libc_cpp.cpp,
-				libc.c,
+				libc.cpp,
 				memory.cpp,
 				nv_darwin.h,
 				nvlink.cpp,
 				os.cpp,
 				pci.cpp,
 				power.cpp,
+				shim_kernel.h,
 				stubs.c,
 				userland.cpp,
 			);
@@ -113,17 +117,16 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
-				driverkit_shim.h,
 				firmware.cpp,
 				iokit.cpp,
-				libc_cpp.cpp,
-				libc.c,
+				libc.cpp,
 				memory.cpp,
 				nv_darwin.h,
 				nvlink.cpp,
 				os.cpp,
 				pci.cpp,
 				power.cpp,
+				shim_driverkit.h,
 				stubs.c,
 				userland.cpp,
 			);
@@ -136,8 +139,7 @@
 				debug.cpp,
 				firmware.cpp,
 				iokit.cpp,
-				libc_cpp.cpp,
-				libc.c,
+				libc.cpp,
 				memory.cpp,
 				nvlink.cpp,
 				os.cpp,
@@ -284,9 +286,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */,
-				4254DC5E2DF00F9000871F6B /* PCIDriverKit.framework in Frameworks */,
+				4252EB502E023A04003F3853 /* PCIDriverKit.framework in Frameworks */,
 				425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */,
-				427A91472DF324E800CB6C21 /* libsystem_pthread.tbd in Frameworks */,
 				4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */,
 				427A91522DF3521500CB6C21 /* libsystem_kernel.tbd in Frameworks */,
 				427A914B2DF3284700CB6C21 /* libsystem_c.tbd in Frameworks */,
@@ -332,6 +333,12 @@
 		426B441E2DEE64510091BF48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4252EB4F2E023A04003F3853 /* PCIDriverKit.framework */,
+				42E2D2652E0213B80036D9D7 /* libpthread.tbd */,
+				42E2D2642E0213AC0036D9D7 /* libsystem_pthread.tbd */,
+				424844562E01EDFA007519A2 /* libsystem_platform.tbd */,
+				425856B32E01BBB800EB6D71 /* libsystem_kernel.tbd */,
+				425855012E01B3EA00EB6D71 /* Kernel.framework */,
 				4237F0D82DF6183400A148CD /* Foundation.framework */,
 				4237F0D72DF6182E00A148CD /* libSystem.B.tbd */,
 				4237F0D62DF6182700A148CD /* libSystem.tbd */,
@@ -616,7 +623,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -625,6 +631,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -649,7 +656,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -658,6 +664,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.PCIHorror;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -680,7 +687,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DRIVERKIT_DEPLOYMENT_TARGET = 24.5;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/System/DriverKit/System/Library/Frameworks",
@@ -715,7 +722,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DRIVERKIT_DEPLOYMENT_TARGET = 24.5;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/System/DriverKit/System/Library/Frameworks",
@@ -746,11 +753,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -762,9 +766,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = NP873NYDVX;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -776,7 +777,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -789,7 +789,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = driverkit;
 			};
@@ -799,31 +798,23 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */;
 			buildSettings = {
-				ARCHS = x86_64;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NVMacRM/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Support/open-gpu-kernel-modules/src/nvidia",
-					"$(PROJECT_DIR)/Support/nvidia-agnostic-api",
-					"$(PROJECT_DIR)",
+					"$(SDKROOT)/usr/lib/system",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_NAME = space.joscomputing.NVMacRM;
 				MODULE_VERSION = 1.0.0d1;
-				OTHER_CFLAGS = (
-					"-DNV_KERNEL_INTERFACE_LAYER=1",
-					"-DNVRM",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.NVMacRM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -840,31 +831,23 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */;
 			buildSettings = {
-				ARCHS = x86_64;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NVMacRM/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Support/open-gpu-kernel-modules/src/nvidia",
-					"$(PROJECT_DIR)/Support/nvidia-agnostic-api",
-					"$(PROJECT_DIR)",
+					"$(SDKROOT)/usr/lib/system",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_NAME = space.joscomputing.NVMacRM;
 				MODULE_VERSION = 1.0.0d1;
-				OTHER_CFLAGS = (
-					"-DNV_KERNEL_INTERFACE_LAYER=1",
-					"-DNVRM",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = space.joscomputing.NVMacRM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -879,7 +862,7 @@
 		426B44102DEE5C770091BF48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -912,7 +895,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -930,9 +912,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Support/MacKernelSDK/Headers";
-				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/Support/MacKernelSDK/Headers";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Support/MacKernelSDK/Library/x86_64";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -946,7 +925,7 @@
 		426B44112DEE5C770091BF48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -979,7 +958,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = NP873NYDVX;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -991,9 +969,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Support/MacKernelSDK/Headers";
-				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/Support/MacKernelSDK/Headers";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Support/MacKernelSDK/Library/x86_64";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;

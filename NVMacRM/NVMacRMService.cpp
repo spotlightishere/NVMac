@@ -5,9 +5,7 @@
 //  Created by Spotlight Deveaux on 2025-06-02.
 //
 
-#include <IOKit/IOLib.h>
-#include <nvinit.h>
-
+#include "nv_darwin.h"
 #include "NVMacRMService.hpp"
 
 OSDefineMetaClassAndStructors(NVMacRMService, IOService);
@@ -17,8 +15,6 @@ bool NVMacRMService::init(OSDictionary* dictionary) {
     if (!superResult) {
         return false;
     }
-
-    nv_darwin_init();
 
     return true;
 }
