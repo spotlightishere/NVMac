@@ -21,11 +21,11 @@ Largely a work in progress.
 
 Clone this repository with submodules.
 
-You will need to download the corresponding binary driver to this firmware (as of writing, 575.57.08).
+You will need to download the corresponding binary driver to this firmware (as of writing, 575.64).
 Extract it:
-> ./NVIDIA-Linux-x86_64-575.57.08.run -x
+> ./NVIDIA-Linux-x86_64-575.64.run -x
 
-This will provide you with a new folder named `NVIDIA-Linux-x86_64-575.57.08.run`, and a folder named `firmware` within.
+This will provide you with a new folder named `NVIDIA-Linux-x86_64-575.64.run`, and a folder named `firmware` within.
 Copy this folder to 
 
 For DriverKit, please edit `Support/open-source-src/nvidia/arch/nvalloc/unix/src/asm/x86/nv_rdcr.c` to return 0.
