@@ -16,6 +16,7 @@
 		4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80D2DF1451600544179 /* nv-kernel-macosx.a */; };
 		427A914B2DF3284700CB6C21 /* libsystem_c.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A914A2DF3284200CB6C21 /* libsystem_c.tbd */; };
 		427A91522DF3521500CB6C21 /* libsystem_kernel.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A91512DF3520F00CB6C21 /* libsystem_kernel.tbd */; };
+		42B2556B2E04D9CE001E2A84 /* libsystem_pthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 427A91462DF324E300CB6C21 /* libsystem_pthread.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,7 @@
 				debug.cpp,
 				firmware.cpp,
 				iokit.cpp,
+				libc_kernel.cpp,
 				libc.cpp,
 				memory.cpp,
 				nv_darwin.h,
@@ -119,6 +121,7 @@
 				debug.cpp,
 				firmware.cpp,
 				iokit.cpp,
+				libc_driverkit.cpp,
 				libc.cpp,
 				memory.cpp,
 				nv_darwin.h,
@@ -139,6 +142,8 @@
 				debug.cpp,
 				firmware.cpp,
 				iokit.cpp,
+				libc_driverkit.cpp,
+				libc_kernel.cpp,
 				libc.cpp,
 				memory.cpp,
 				nvlink.cpp,
@@ -288,6 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */,
+				42B2556B2E04D9CE001E2A84 /* libsystem_pthread.tbd in Frameworks */,
 				4252EB502E023A04003F3853 /* PCIDriverKit.framework in Frameworks */,
 				425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */,
 				4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */,
