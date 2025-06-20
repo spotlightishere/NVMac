@@ -10,7 +10,6 @@
 		4252EB502E023A04003F3853 /* PCIDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4252EB4F2E023A04003F3853 /* PCIDriverKit.framework */; };
 		4254DC472DEFFA2F00871F6B /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4239C81E2DEEE9A2008481B4 /* DriverKit.framework */; };
 		4254DC502DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		425D7EC02DF305BE0076989D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425D7EBF2DF305BD0076989D /* IOKit.framework */; };
 		425D7EC62DF30CA60076989D /* libsystem_platform.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 425D7EC42DF30C530076989D /* libsystem_platform.tbd */; };
 		4261A80C2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80B2DF1450900544179 /* ../Debug-driverkit/nv-kernel-driverkit.a */; };
 		4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4261A80D2DF1451600544179 /* nv-kernel-macosx.a */; };
@@ -26,6 +25,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4254DC452DEFFA2F00871F6B;
 			remoteInfo = PCIHorrorKit;
+		};
+		425846A92E04F8E100F98353 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 426B43FB2DEE5C770091BF48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4261A8052DF1428E00544179;
+			remoteInfo = "libnv-kernel-driverkit";
+		};
+		425846AB2E04F90900F98353 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 426B43FB2DEE5C770091BF48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4261A7DE2DF13C6A00544179;
+			remoteInfo = "libnv-kernel-macosx";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -54,6 +67,8 @@
 		4254DC352DEFFA2000871F6B /* PCIHorror.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCIHorror.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4254DC462DEFFA2F00871F6B /* space.joscomputing.PCIHorror.PCIHorrorKit.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = space.joscomputing.PCIHorror.PCIHorrorKit.dext; sourceTree = BUILT_PRODUCTS_DIR; };
 		4254DC5D2DF00F9000871F6B /* PCIDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCIDriverKit.framework; path = Platforms/DriverKit.platform/Developer/SDKs/DriverKit25.0.sdk/System/DriverKit/System/Library/Frameworks/PCIDriverKit.framework; sourceTree = DEVELOPER_DIR; };
+		4258494E2E04F95700F98353 /* Capstone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Capstone.xcodeproj; sourceTree = "<group>"; };
+		425849D02E04F95700F98353 /* Lilu.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Lilu.xcodeproj; sourceTree = "<group>"; };
 		425855012E01B3EA00EB6D71 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
 		425856B32E01BBB800EB6D71 /* libsystem_kernel.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsystem_kernel.tbd; path = usr/lib/system/libsystem_kernel.tbd; sourceTree = SDKROOT; };
 		425D7EBF2DF305BD0076989D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -98,7 +113,7 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
-				firmware.cpp,
+				firmware_kernel.cpp,
 				iokit.cpp,
 				libc_kernel.cpp,
 				libc.cpp,
@@ -119,7 +134,7 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
-				firmware.cpp,
+				firmware_driverkit.cpp,
 				iokit.cpp,
 				libc_driverkit.cpp,
 				libc.cpp,
@@ -140,7 +155,8 @@
 			membershipExceptions = (
 				acpi.cpp,
 				debug.cpp,
-				firmware.cpp,
+				firmware_driverkit.cpp,
+				firmware_kernel.cpp,
 				iokit.cpp,
 				libc_driverkit.cpp,
 				libc_kernel.cpp,
@@ -307,13 +323,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				4261A80E2DF1451600544179 /* nv-kernel-macosx.a in Frameworks */,
-				425D7EC02DF305BE0076989D /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		425849D42E04F95700F98353 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		425849D62E04F95700F98353 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		426B43FA2DEE5C770091BF48 = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +507,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				425846AA2E04F8E100F98353 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4254DC482DEFFA2F00871F6B /* PCIHorrorKit */,
@@ -502,6 +532,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				425846AC2E04F90900F98353 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				426B44062DEE5C770091BF48 /* NVMacRM */,
@@ -551,6 +582,16 @@
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 425849D42E04F95700F98353 /* Products */;
+					ProjectRef = 4258494E2E04F95700F98353 /* Capstone.xcodeproj */;
+				},
+				{
+					ProductGroup = 425849D62E04F95700F98353 /* Products */;
+					ProjectRef = 425849D02E04F95700F98353 /* Lilu.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				426B44032DEE5C770091BF48 /* NVMacRM */,
@@ -615,6 +656,16 @@
 			isa = PBXTargetDependency;
 			target = 4254DC452DEFFA2F00871F6B /* PCIHorrorKit */;
 			targetProxy = 4254DC4E2DEFFA2F00871F6B /* PBXContainerItemProxy */;
+		};
+		425846AA2E04F8E100F98353 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4261A8052DF1428E00544179 /* libnv-kernel-driverkit */;
+			targetProxy = 425846A92E04F8E100F98353 /* PBXContainerItemProxy */;
+		};
+		425846AC2E04F90900F98353 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4261A7DE2DF13C6A00544179 /* libnv-kernel-macosx */;
+			targetProxy = 425846AB2E04F90900F98353 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -812,6 +863,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
 				DEAD_CODE_STRIPPING = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"XCODE_PROJECT_DIR=\"\\\"$(PROJECT_DIR)\\\"\"",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NVMacRM/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -845,6 +900,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.0d1;
 				DEAD_CODE_STRIPPING = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "XCODE_PROJECT_DIR=\"\\\"$(PROJECT_DIR)\\\"\"";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NVMacRM/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
