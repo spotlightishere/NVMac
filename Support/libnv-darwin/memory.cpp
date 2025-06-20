@@ -6,8 +6,12 @@
 //
 
 #include "nv_darwin.h"
-#include <bit>
 #include <os/nv_memory_type.h>
+
+// Used for calculating page shift under DriverKit.
+#if TARGET_OS_DRIVERKIT
+#include <bit>
+#endif
 
 #pragma mark - Internal Mapping
 
@@ -135,7 +139,7 @@ void nv_set_dma_address_size(nv_state_t* nv, NvU32 phys_addr_bits) {
 
 #pragma mark - Kernel Mapping
 
-#ifdef TARGET_OS_DRIVERKIT
+#if TARGET_OS_DRIVERKIT
 NvU32 os_page_size = (NvU32)IOVMPageSize;
 NvU64 os_page_mask = ~(os_page_size - 1);
 // e.g. 1 << 12 is 4096, 1 << 14 is 16384.
@@ -210,6 +214,7 @@ void* os_map_kernel_space(NvU64 start, NvU64 size_bytes, NvU32 mode) {
     // TODO(spotlightishere): =(
     global_mapped_memory->setObject(keyName, mapping);
 
+    OSSafeReleaseNULL(mapping);
     OSSafeReleaseNULL(returnMemory);
     nvd_log("[libnv-darwin] Mapped to %p", addressBase);
 

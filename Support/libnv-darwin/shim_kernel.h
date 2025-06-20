@@ -36,5 +36,4 @@
 // but for some reason, this header refuses to import.
 kern_return_t pid_for_task(task_t task, int32_t* pid);
 
-
 #endif

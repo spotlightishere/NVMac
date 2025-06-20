@@ -13,7 +13,5 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
-
 
 #endif /* libspdm_polyfill_h */
