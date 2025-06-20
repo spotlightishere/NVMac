@@ -57,7 +57,7 @@ NV_STATUS os_cond_acquire_mutex(void* pMutex) {
 }
 
 void os_release_mutex(void* pMutex) {
-    IOLockUnlock((IOLock *)pMutex);
+    IOLockUnlock((IOLock*)pMutex);
 }
 
 #pragma mark Synchronization - R/W Lock

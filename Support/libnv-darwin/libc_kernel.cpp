@@ -65,7 +65,7 @@ NV_STATUS os_cond_acquire_mutex(void* pMutex) {
 }
 
 void os_release_mutex(void* pMutex) {
-    IOLockUnlock((IOLock *)pMutex);
+    IOLockUnlock((IOLock*)pMutex);
 }
 
 #pragma mark Synchronization - R/W Lock
@@ -75,34 +75,34 @@ void* os_alloc_rwlock(void) {
 }
 
 void os_free_rwlock(void* pRwLock) {
-    IORWLockFree((IORWLock *)pRwLock);
+    IORWLockFree((IORWLock*)pRwLock);
 }
 
 NV_STATUS os_acquire_rwlock_read(void* pRwLock) {
-    IORWLockRead((IORWLock *)pRwLock);
+    IORWLockRead((IORWLock*)pRwLock);
     return NV_OK;
 }
 
 NV_STATUS os_acquire_rwlock_write(void* pRwLock) {
-    IORWLockWrite((IORWLock *)pRwLock);
+    IORWLockWrite((IORWLock*)pRwLock);
     return NV_OK;
 }
 
 NV_STATUS os_cond_acquire_rwlock_read(void* pRwLock) {
-    IORWLockTryRead((IORWLock *)pRwLock);
+    IORWLockTryRead((IORWLock*)pRwLock);
     return NV_OK;
 }
 
 NV_STATUS os_cond_acquire_rwlock_write(void* pRwLock) {
-    IORWLockTryWrite((IORWLock *)pRwLock);
+    IORWLockTryWrite((IORWLock*)pRwLock);
     return NV_OK;
 }
 
 void os_release_rwlock_read(void* pRwLock) {
-    IORWLockUnlock((IORWLock *)pRwLock);
+    IORWLockUnlock((IORWLock*)pRwLock);
 }
 
 void os_release_rwlock_write(void* pRwLock) {
-    IORWLockUnlock((IORWLock *)pRwLock);
+    IORWLockUnlock((IORWLock*)pRwLock);
 }
 }

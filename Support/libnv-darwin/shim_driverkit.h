@@ -128,7 +128,6 @@ int pthread_rwlock_wrlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_trywrlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_unlock(pthread_rwlock_t* rwlock);
 
-
 #pragma mark - Semaphore
 
 // A `semaphore_t` is an `mach_port_t` within userspace:
