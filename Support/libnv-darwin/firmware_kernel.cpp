@@ -6,6 +6,13 @@
 //
 
 #include "nv_darwin.h"
+
+// Weirdly, `vnode_verify_kind_t` is not
+// defined anywhere as of macOS 26.0.
+//
+// It's required to import <sys/vnode.h>.
+typedef uint32_t vnode_verify_kind_t;
+
 #include <sys/vnode.h>
 
 extern "C" {
@@ -25,8 +32,6 @@ struct nv_darwin_fw_context {
     void* buffer;
     size_t buffer_size;
 };
-
-errno_t vnode_size(vnode_t, off_t*, vfs_context_t);
 
 const void* nv_get_firmware(nv_state_t* nv, nv_firmware_type_t fw_type,
                             nv_firmware_chip_family_t fw_chip_family,

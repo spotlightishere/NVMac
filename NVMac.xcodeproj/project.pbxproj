@@ -117,11 +117,12 @@
 				iokit.cpp,
 				libc_kernel.cpp,
 				libc.cpp,
+				memory_kernel.cpp,
 				memory.cpp,
 				nv_darwin.h,
 				nvlink.cpp,
 				os.cpp,
-				pci.cpp,
+				pci_kernel.cpp,
 				power.cpp,
 				shim_kernel.h,
 				stubs.c,
@@ -138,11 +139,12 @@
 				iokit.cpp,
 				libc_driverkit.cpp,
 				libc.cpp,
+				memory_driverkit.cpp,
 				memory.cpp,
 				nv_darwin.h,
 				nvlink.cpp,
 				os.cpp,
-				pci.cpp,
+				pci_driverkit.cpp,
 				power.cpp,
 				shim_driverkit.h,
 				stubs.c,
@@ -161,10 +163,13 @@
 				libc_driverkit.cpp,
 				libc_kernel.cpp,
 				libc.cpp,
+				memory_driverkit.cpp,
+				memory_kernel.cpp,
 				memory.cpp,
 				nvlink.cpp,
 				os.cpp,
-				pci.cpp,
+				pci_driverkit.cpp,
+				pci_kernel.cpp,
 				power.cpp,
 				README.md,
 				stubs.c,
@@ -857,6 +862,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */;
 			buildSettings = {
+				ARCHS = x86_64;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;
@@ -894,6 +900,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4261A7E42DF140A300544179 /* libnv-kernel.xcconfig */;
 			buildSettings = {
+				ARCHS = x86_64;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;

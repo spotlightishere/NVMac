@@ -23,7 +23,9 @@
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.iokit.IOPCIFamily</key>
-		<string>1.0.0b1</string>
+		<string>2.9</string>
+		<key>com.apple.kpi.bsd</key>
+		<string>12.0.0</string>
 		<key>com.apple.kpi.iokit</key>
 		<string>12.0.0</string>
 		<key>com.apple.kpi.libkern</key>
