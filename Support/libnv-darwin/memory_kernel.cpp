@@ -45,7 +45,7 @@ void* os_map_kernel_space(NvU64 start, NvU64 size, NvU32 mode) {
         return NULL;
     }
 
-    // Determine
+    // Determine cache type.
     IOOptionBits memoryMode;
     switch (mode) {
     case NV_MEMORY_CACHED:
@@ -63,7 +63,8 @@ void* os_map_kernel_space(NvU64 start, NvU64 size, NvU32 mode) {
         return NULL;
     }
 
-    IOMemoryMap* mapping = device->mapDeviceMemoryWithRegister(memoryIndex, memoryMode);
+    IOMemoryMap* mapping =
+        device->mapDeviceMemoryWithRegister(memoryIndex, memoryMode);
     void* addressBase = (void*)mapping->getPhysicalAddress();
     // We expect `%p` to produce format `0xabcdef0123456789`.
     // This should be twice its size (e.g. 8 bytes -> 16 characters),
@@ -104,6 +105,13 @@ void os_unmap_kernel_space(void* addressBase, NvU64 size_bytes) {
 
 #pragma mark - DMA
 
+/// Used to persist an `IODMACommand` and
+/// `IOBufferMemoryDescriptor` for later freeing.
+struct DMACommandDescriptorPairing {
+    IODMACommand* command;
+    IOBufferMemoryDescriptor* descriptor;
+};
+
 NV_STATUS nv_alias_pages(nv_state_t* nv, NvU32 count, NvU64 page_size,
                          NvU32 alloc_type_contiguous, NvU32 cache_type,
                          NvU64 guest_id, NvU64* pte_array, NvBool carveout,
@@ -124,61 +132,94 @@ NV_STATUS nv_alloc_pages(nv_state_t* nv, NvU32 page_count, NvU64 page_size,
             "%d and %s",
             page_size, page_count, contigunuity);
 
-    // Translate options.
-    // We are not handling encrypted pages, or node IDs.
-    //
-    // There appears to be a way to encrypt pages within IOKit,
-    // but not from APIs present in DriverKit...
-    uint64_t options = kIOMemoryDirectionInOut;
-    // TODO(spotlightishere): Remove, eventually
-    if (totalSize >= (1 * 1024 * 1024 * 1024)) {
-        totalSize = page_count * 1 * 1024 * 1024 * 1024;
-        //        __builtin_debugtrap();
+    // Determine cache type.
+    IOOptionBits bufferOptions = kIODirectionInOut;
+    switch (cache_type) {
+    case NV_MEMORY_CACHED:
+        bufferOptions |= kIOMapDefaultCache;
+        break;
+    case NV_MEMORY_WRITECOMBINED:
+        bufferOptions |= kIOMapWriteCombineCache;
+        break;
+    case NV_MEMORY_UNCACHED:
+    case NV_MEMORY_DEFAULT:
+        bufferOptions |= kIOMapInhibitCache;
+        break;
+    default:
+        nvd_log("NVRM: unknown mode in nv_alloc_pages()\n");
+        return NV_ERR_NOT_SUPPORTED;
     }
 
-    // We specify 0 for "no specific alignment".
-    IOBufferMemoryDescriptor* descriptor;
-    kern_return_t result =
-        IOBufferMemoryDescriptor::Create(options, totalSize, 0, &descriptor);
-    if (result != KERN_SUCCESS) {
-        nvd_log("[libnv-darwin] Failed to allocate buffer: %d", result);
+    // Map as contiguous if requested.
+    if (contiguous) {
+        bufferOptions |= kIOMemoryPhysicallyContiguous;
+    }
+
+    uint64_t bitMask = (1U << nvd_state->dma_mask) - 1;
+    IOBufferMemoryDescriptor* descriptor =
+        IOBufferMemoryDescriptor::inTaskWithPhysicalMask(
+            kernel_task, bufferOptions, page_size, bitMask);
+    if (descriptor == NULL) {
+        nvd_log("[libnv-darwin] Failed to allocate memory for DMA!");
+        return NV_ERR_NO_MEMORY;
+    }
+    descriptor->prepare();
+
+    // We'll retain this IODMACommand until the pages are freed.
+    IODMACommand* command = IODMACommand::withSpecification(
+        kIODMACommandOutputHost64, 64, page_size, IODMACommand::kMapped,
+        totalSize, 0);
+    if (command == NULL) {
+        nvd_log("[libnv-darwin] Failed to create DMA command!");
+        descriptor->complete();
+        OSSafeReleaseNULL(descriptor);
         return NV_ERR_NO_MEMORY;
     }
 
-    IOAddressSegment range = {};
-    descriptor->GetAddressRange(&range);
-    void* ptr = (void*)range.address;
-    if (ptr == NULL) {
-        panic("[libnvd-darwin] IOAddressSegment address is null!");
+    // Enumerate through every created segment,
+    // and register such within the PTE table.
+    UInt64 offset = 0;
+    IODMACommand::Segment64 segment[] = {};
+    UInt32 segmentCount = 1;
+
+    command->setMemoryDescriptor(descriptor);
+    IOReturn result =
+        command->gen64IOVMSegments(&offset, segment, &segmentCount);
+    if (result != kIOReturnSuccess) {
+        descriptor->complete();
+        OSSafeReleaseNULL(descriptor);
+        OSSafeReleaseNULL(command);
+        return NV_ERR_NO_MEMORY;
     }
 
-    if (zeroed) {
-        // Zero ourselves.
-        bzero(ptr, range.length);
-    }
+    for (int i = 0; i < segmentCount; i++) {
+        pte_array[i] = segment[i].fIOVMAddr;
 
-    // TODO(spotlightishere): We don't really have a array of page entries.
-    // This might be incorrect...
-    if (contiguous) {
-        pte_array[0] = range.address;
-    } else {
-        // Manually create an array of page entries by iterating for page count.
-        for (int i = 0; i < page_count; i += 1) {
-            pte_array[i] = range.address + (i * page_size);
+        if (zeroed) {
+            bzero((void*)segment[i].fIOVMAddr, page_size);
         }
     }
 
-    // Store our descriptor as private data.
-    *priv_data = (void*)descriptor;
+    // Persist our descriptor and command when releasing.
+    DMACommandDescriptorPairing* pairing =
+        IONew(DMACommandDescriptorPairing, 1);
+    pairing->command = command;
+    pairing->descriptor = descriptor;
+    *priv_data = pairing;
 
     return NV_OK;
 }
 
 NV_STATUS nv_free_pages(nv_state_t* nv, NvU32 page_count, NvBool contiguous,
                         NvU32 cache_type, void* priv_data) {
-    // We have an IOBufferMemoryDescriptor.
-    IOBufferMemoryDescriptor* descriptor = (IOBufferMemoryDescriptor*)priv_data;
-    OSSafeReleaseNULL(descriptor);
+    // We have an DMACommandDescriptorPairing.
+    DMACommandDescriptorPairing* pairing =
+        (DMACommandDescriptorPairing*)priv_data;
+    pairing->command->clearMemoryDescriptor();
+    pairing->descriptor->complete();
+
+    OSSafeReleaseNULL(pairing->command);
+    OSSafeReleaseNULL(pairing->descriptor);
     return NV_OK;
 }
 
@@ -189,12 +230,11 @@ void* nv_alloc_kernel_mapping(nv_state_t* nv, void* pAllocPrivate,
     // We should be given an IOBufferMemoryDescriptor.
     IOBufferMemoryDescriptor* descriptor =
         (IOBufferMemoryDescriptor*)pAllocPrivate;
-    IOAddressSegment range = {};
-    descriptor->GetAddressRange(&range);
+    uint64_t baseAddress = descriptor->getPhysicalAddress();
 
     // Return an offset to the page specified.
     uint64_t pageAddress =
-        range.address + (pageIndex * os_page_size) + pageOffset;
+        baseAddress + (pageIndex * os_page_size) + pageOffset;
     return (void*)pageAddress;
 }
 
@@ -213,12 +253,11 @@ NV_STATUS nv_alloc_user_mapping(nv_state_t* nv, void* pAllocPrivate,
     // We should be given an IOBufferMemoryDescriptor.
     IOBufferMemoryDescriptor* descriptor =
         (IOBufferMemoryDescriptor*)pAllocPrivate;
-    IOAddressSegment range = {};
-    descriptor->GetAddressRange(&range);
+    uint64_t baseAddress = descriptor->getPhysicalAddress();
 
     // Return an offset to the page specified.
     uint64_t pageAddress =
-        range.address + (pageIndex * os_page_size) + pageOffset;
+        baseAddress + (pageIndex * os_page_size) + pageOffset;
     *pUserAddress = pageAddress;
 
     nvd_log("Returned a user mapping for %llu", pageAddress);

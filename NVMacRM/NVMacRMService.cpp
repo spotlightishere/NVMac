@@ -77,7 +77,6 @@ bool NVMacRMService::start(IOService* provider) {
         Stop(provider);
         return kIOReturnNoDevice;
     }
-    uint16_t commandRegister;
     potentialDevice->setMemoryEnable(true);
     potentialDevice->setBusLeadEnable(true);
 
@@ -125,13 +124,13 @@ bool NVMacRMService::start(IOService* provider) {
          currentBAR++) {
         IODeviceMemory* barInfo = potentialDevice->getDeviceMemoryWithIndex(currentBAR);
         IOByteCount barSize = barInfo->getLength();
-        uint64_t barAddress = barInfo->getPhysicalAddress();
+        IOPhysicalAddress barAddress = barInfo->getPhysicalAddress();
 
         nv->bars[j].offset = NVRM_PCICFG_BAR_OFFSET(currentBAR);
         nv->bars[j].cpu_address = barAddress;
         nv->bars[j].size = barSize;
 
-        nvd_log("inserting bar %x @ %08x with size %llu",
+        nvd_log("inserting bar %x @ %08llx with size %llu",
                 currentBAR, barAddress, barSize);
         j++;
     }

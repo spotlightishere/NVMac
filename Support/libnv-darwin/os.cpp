@@ -177,9 +177,14 @@ NV_STATUS os_find_ns_pid(void* pid_info, NvU32* ns_pid) {
 }
 
 NvU32 os_get_current_process(void) {
+#if TARGET_OS_DRIVERKIT
     int32_t pid = 0;
     pid_for_task(nvd_task(), &pid);
     return pid;
+#else
+    // TODO(spotlightishere): Implement for kernel
+    return 0;
+#endif
 }
 
 NvBool os_is_init_ns(void) {
